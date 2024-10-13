@@ -1,35 +1,61 @@
 const express = require("express");
-const app = express();
 const path = require("path");
-const { Pool } = require("pg");
+const axios = require("axios");
+const sequelize = require("./db/connect");
+const ediStandardRoutes = require("./routes/edi_standards");
+const messageTypeRoutes = require("./routes/message_types");
+
 
 // Express
+const app = express();
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// pg
-const pool = new Pool({
-    connectionString: "postgres://edi_admin:247139@localhost:5432/edi_analyzer"
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+
+//Axios
+const axiosConfigForApi = {
+  baseURL: "http://localhost:8000/api/"
+}
+
+// Routes
+app.get("/", async (req, res) => {
+  try {
+    const ediStandards = await axios.get("/edi-standards", axiosConfigForApi );
+    console.log(ediStandards.data);
+    res.render("analyzer", { ediStandards: ediStandards.data });
+  } catch (err) {
+    console.error("Error when rendering EDI Analyzer page", err.stack);
+  }
 });
 
-pool.connect((err, client, done) => {
-    if (err) {
-        return console.error('error fetching client from pool', err);
-      }
-      client.query('SELECT $1::int AS number', ['1'], function(err, result) {
-        done();
-        if (err) {
-          return console.error('error running query', err);
-        }
-        console.log(result.rows[0].number);
+// API routes
+app.use("/api", ediStandardRoutes, messageTypeRoutes);
+
+sequelize.sync()
+    .then(() => {
+      console.log("Database & tables created");
+    })
+    .catch(err => {
+      console.error("Error syncing database", err);
+    })
+
+/*
+app.get("/", async (req, res) => {
+    try {
+      const edi_standards = await db.pool.query("SELECT * FROM edi_standard");
+      const message_types = await db.pool.query("SELECT * FROM message_type")
+      res.render("index", {
+        edi_standards: edi_standards.rows,
+        message_types: message_types.rows
       });
-    
-    });
-
-app.get("/", (req, res) => {
-    res.render("index");
+    } catch (err) {
+      console.error("Error when querying the database", err.stack);
+    }
 });
-
+*/
 app.listen(8000, () => {
-    console.log("Listening on port");
+    console.log("Listening on port 8000");
 });
