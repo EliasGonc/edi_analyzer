@@ -4,7 +4,8 @@ const axios = require("axios");
 const sequelize = require("./db/connect");
 const ediStandardRoutes = require("./routes/edi_standards");
 const messageTypeRoutes = require("./routes/message_types");
-
+const messageVersionRoutes = require("./routes/message_versions");
+const ediMessageRoutes = require("./routes/edi_messages");
 
 // Express
 const app = express();
@@ -24,7 +25,6 @@ const axiosConfigForApi = {
 app.get("/", async (req, res) => {
   try {
     const ediStandards = await axios.get("/edi-standards", axiosConfigForApi );
-    console.log(ediStandards.data);
     res.render("analyzer", { ediStandards: ediStandards.data });
   } catch (err) {
     console.error("Error when rendering EDI Analyzer page", err.stack);
@@ -32,7 +32,7 @@ app.get("/", async (req, res) => {
 });
 
 // API routes
-app.use("/api", ediStandardRoutes, messageTypeRoutes);
+app.use("/api", ediStandardRoutes, messageTypeRoutes, messageVersionRoutes, ediMessageRoutes);
 
 sequelize.sync()
     .then(() => {

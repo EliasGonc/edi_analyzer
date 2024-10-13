@@ -1,10 +1,10 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
-const EdiStandard = require("./edi_standard");
+const MessageType = require("./message_type");
 
-class MessageType extends Model {}
+class MessageVersion extends Model {}
 
-MessageType.init(
+MessageVersion.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -19,10 +19,10 @@ MessageType.init(
             type: DataTypes.STRING(10),
             allowNull: false,
         },
-        edi_standard_id: {
+        message_type_id: {
             type: DataTypes.INTEGER,
             references: {
-                model: EdiStandard,
+                model: MessageType,
                 key: "id",
             },
             allowNull: true
@@ -30,10 +30,10 @@ MessageType.init(
     },
     {
         sequelize,
-        modelName: "MessageType",
-        tableName: "message_type",
+        modelName: "MessageVersion",
+        tableName: "message_version",
         timestamps: false,
     }
 );
 
-module.exports = MessageType;
+module.exports = MessageVersion;
