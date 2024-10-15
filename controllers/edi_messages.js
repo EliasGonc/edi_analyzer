@@ -1,23 +1,10 @@
 const EdiMessage = require("../models/edi_message");
-
-const validateRequestAttribute = function(requestAttribute) {
-    const { edi_standard_id, message_type_id, message_version_id } = requestAttribute;
-    if (!edi_standard_id || !message_type_id || !message_version_id ) {
-        throw new Error("Missing ID(s): " 
-            + `${edi_standard_id ? "edi_standard_id; " : ""}`
-            + `${message_type_id ? "message_type_id; " : ""}`
-            + `${message_version_id ? "message_version_id; " : ""}`
-        );
-    }
-}
+const { createWhereClause, validateRequestAttribute } = require("./helper_functions");
 
 exports.getEdiMessages = async (req, res) => {
-    const { edi_standard_id, message_type_id, message_version_id } = req.query;
-    const whereClause = {};
-    if (edi_standard_id) whereClause.edi_standard_id = edi_standard_id;
-    if (message_type_id) whereClause.message_type_id = message_type_id;
-    if (message_version_id) whereClause.message_version_id = message_version_id;
-    console.log(whereClause);
+    const whereClause = createWhereClause(req.query, [
+        "edi_standard_id", "message_type_id", "message_version_id"
+    ]);
     try {
         res.json(await EdiMessage.findAll({ where: whereClause }));
     } catch (err) {

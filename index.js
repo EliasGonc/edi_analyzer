@@ -2,10 +2,14 @@ const express = require("express");
 const path = require("path");
 const axios = require("axios");
 const sequelize = require("./db/connect");
+
+// Routes
 const ediStandardRoutes = require("./routes/edi_standards");
 const messageTypeRoutes = require("./routes/message_types");
 const messageVersionRoutes = require("./routes/message_versions");
 const ediMessageRoutes = require("./routes/edi_messages");
+const segmentRoutes = require("./routes/segments");
+const dataElementRoutes = require("./routes/data_elements");
 
 // Express
 const app = express();
@@ -32,7 +36,7 @@ app.get("/", async (req, res) => {
 });
 
 // API routes
-app.use("/api", ediStandardRoutes, messageTypeRoutes, messageVersionRoutes, ediMessageRoutes);
+app.use("/api", ediStandardRoutes, messageTypeRoutes, messageVersionRoutes, ediMessageRoutes, segmentRoutes, dataElementRoutes);
 
 sequelize.sync()
     .then(() => {
