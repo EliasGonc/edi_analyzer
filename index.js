@@ -1,7 +1,9 @@
 const express = require("express");
 const path = require("path");
-const axios = require("axios");
+// const axios = require("axios");
 const sequelize = require("./db/connect");
+const ejsMate = require("ejs-mate");
+const axios = require("./axiosInstance");
 
 // Routes
 const ediStandardRoutes = require("./routes/edi_standards");
@@ -10,15 +12,20 @@ const messageVersionRoutes = require("./routes/message_versions");
 const ediMessageRoutes = require("./routes/edi_messages");
 const segmentRoutes = require("./routes/segments");
 const dataElementRoutes = require("./routes/data_elements");
+const messageContentRoutes = require("./routes/message_contents");
+const segmentContentRoutes = require("./routes/segment_contents");
+const analyzerRoutes = require("./routes/analyzer");
 
 // Express
 const app = express();
 
+app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //Axios
 const axiosConfigForApi = {
@@ -36,7 +43,17 @@ app.get("/", async (req, res) => {
 });
 
 // API routes
-app.use("/api", ediStandardRoutes, messageTypeRoutes, messageVersionRoutes, ediMessageRoutes, segmentRoutes, dataElementRoutes);
+app.use("/api",
+  ediStandardRoutes,
+  messageTypeRoutes,
+  messageVersionRoutes,
+  ediMessageRoutes,
+  segmentRoutes,
+  dataElementRoutes,
+  messageContentRoutes,
+  segmentContentRoutes,
+);
+app.use("/", analyzerRoutes);
 
 sequelize.sync()
     .then(() => {

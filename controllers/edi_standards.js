@@ -1,18 +1,11 @@
-// const EdiStandard = require("../models/edi_standard");
 const { EdiStandard } = require("../models/associations");
+const { createWhereClause, validateRequestAttributes } = require("./helper_functions");
 
-exports.getAllEdiStandards = async (req, res) => {
-    const { name } = req.query;
+exports.getEdiStandards = async (req, res) => {
     try {
-        if (!name) {
-            res.json(await EdiStandard.findAll());
-        } else {
-            res.json(await EdiStandard.findAll({
-                where: {
-                    name: name
-                }
-            }));
-        }
+        res.json(await EdiStandard.findAll({
+            where: createWhereClause(req.query, EdiStandard)
+        }));
     } catch (err) {
         console.error("Error fetching EDI standards:", err);
         res.status(500).json({ error: "Internal server error" });
@@ -32,14 +25,15 @@ exports.getEdiStandardById = async (req, res) => {
     }
 };
 
+
 exports.createEdiStandard = async (req, res) => {
     try {
-        const { name, identifier } = req.body;
-        const newEdiStandard = await EdiStandard.create({ name, identifier });
+        const data = await validateRequestAttributes(req.body, EdiStandard);
+        const newEdiStandard = await EdiStandard.create( data );
         res.status(201).json(newEdiStandard);
     } catch (err) {
         console.error("Error creating EDI standard:", err);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", code: 500, details: err.message });
     }
 };
 

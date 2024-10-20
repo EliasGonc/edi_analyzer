@@ -1,3 +1,33 @@
+html {
+    font-size: 12pt;
+}
+
+body {
+    font-size: 1rem;
+}
+
 .option-hidden {
     display: none;
+}
+
+p.segment {
+    white-space-collapse: preserve;
+}
+
+p.segment>span.segment-info-dot {
+    color: green;
+}
+
+p.segment>span.segment-info-dot:hover {
+    color: lightgreen;
+    cursor: pointer;
+}
+
+p.segment>span.data-element:hover {
+    background-color: lightgreen;
+    cursor: pointer;
+}
+
+#results {
+
 }

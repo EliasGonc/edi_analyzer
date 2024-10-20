@@ -21,11 +21,11 @@ MessageType.init(
         },
         edi_standard_id: {
             type: DataTypes.INTEGER,
+            allowNull: true,
             references: {
                 model: EdiStandard,
                 key: "id",
-            },
-            allowNull: true
+            }
         },
     },
     {

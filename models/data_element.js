@@ -21,8 +21,7 @@ DataElement.init(
         },
         description: {
             type: DataTypes.TEXT,
-            allowNull: true,
-            defaultValue: null,
+            allowNull: true
         },
         usage: {
             type: USAGE_ENUM,
@@ -35,13 +34,11 @@ DataElement.init(
         },
         maximum_length: {
             type: DataTypes.INTEGER,
-            allowNull: true,
-            defaultValue: null,
+            allowNull: true
         },
         possible_values: {
             type: DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true,
-            defaultValue: null,
+            allowNull: true
         },
     },
     {

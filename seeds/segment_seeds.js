@@ -1,6 +1,7 @@
 const segmentSeeds = [
     {
         code: "ITP",
+        message_version_id: 1,
         name: "Start of transmission process",
         usage: "mandatory",
         min_repetitions: 1,
@@ -10,6 +11,7 @@ const segmentSeeds = [
     },
     {
         code: "PE1",
+        message_version_id: 1,
         name: "Item data",
         usage: "mandatory",
         min_repetitions: 1,
@@ -19,6 +21,7 @@ const segmentSeeds = [
     },
     {
         code: "PE2",
+        message_version_id: 1,
         name: "Delivery/shipment information",
         usage: "mandatory",
         min_repetitions: 1,
@@ -28,6 +31,7 @@ const segmentSeeds = [
     },
     {
         code: "PE9",
+        message_version_id: 1,
         name: "",
         usage: "optional",
         min_repetitions: 1,
@@ -37,6 +41,7 @@ const segmentSeeds = [
     },
     {
         code: "PE3",
+        message_version_id: 1,
         name: "Delivery/shipment schedule",
         usage: "optional",
         min_repetitions: 1,
@@ -46,6 +51,7 @@ const segmentSeeds = [
     },
     {
         code: "PE5",
+        message_version_id: 1,
         name: "Delivery/shipment schedule additional info",
         usage: "optional",
         min_repetitions: 1,
@@ -55,6 +61,7 @@ const segmentSeeds = [
     },
     {
         code: "PE6",
+        message_version_id: 1,
         name: "Item additional info",
         usage: "optional",
         min_repetitions: 1,
@@ -64,6 +71,7 @@ const segmentSeeds = [
     },
     {
         code: "PE7",
+        message_version_id: 1,
         name: "Customer primary package data",
         usage: "optional",
         min_repetitions: 1,
@@ -73,6 +81,7 @@ const segmentSeeds = [
     },
     {
         code: "PE8",
+        message_version_id: 1,
         name: "Customer secondary package data",
         usage: "optional",
         min_repetitions: 1,
@@ -82,6 +91,7 @@ const segmentSeeds = [
     },
     {
         code: "PE4",
+        message_version_id: 1,
         name: "Package data",
         usage: "optional",
         min_repetitions: 1,
@@ -91,6 +101,7 @@ const segmentSeeds = [
     },
     {
         code: "TE1",
+        message_version_id: 1,
         name: "Free text",
         usage: "optional",
         min_repetitions: 1,
@@ -100,6 +111,7 @@ const segmentSeeds = [
     },
     {
         code: "FTP",
+        message_version_id: 1,
         name: "End of transmission process",
         usage: "mandatory",
         min_repetitions: 1,
@@ -108,4 +120,4 @@ const segmentSeeds = [
         parent_segment_id: 1
     }
 ];
-module.exports = { segmentSeeds };
+module.exports = segmentSeeds;

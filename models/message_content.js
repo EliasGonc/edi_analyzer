@@ -1,62 +1,46 @@
-const { Model, DataTypes } = require("sequelize");
+const { Model, DataType, DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
-const MessageVersion = require("./message_version");
 const { USAGE_ENUM } = require("./usage_enum");
+const EdiMessage = require("./edi_message");
+const Segment = require("./segment");
 
-class Segment extends Model {}
+class MessageContent extends Model {};
 
-Segment.init(
+MessageContent.init(
     {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        code: {
-            type: DataTypes.STRING(10),
-            allowNull: false,
-        },
-        message_version_id: {
+        edi_message_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: MessageVersion,
+                model: EdiMessage,
                 key: "id"
             }
         },
-        name: {
-            type: DataTypes.STRING(100),
+        segment_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
-        },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: true
+            references: {
+                model: Segment,
+                key: "id"
+            }
         },
         usage: {
             type: USAGE_ENUM,
-            defaultValue: "mandatory",
+            allowNull: true
         },
         min_repetitions: {
             type: DataTypes.INTEGER,
-            defaultValue: 1,
+            allowNull: true
         },
         max_repetitions: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        qualifier_id: {
-            type: DataTypes.INTEGER,
-            allowNull: true
-        },
         min_qualif_repetitions: {
             type: DataTypes.INTEGER,
-            defaultValue: 1,
-        },
-        max_qualif_repetitions: {
-            type: DataTypes.INTEGER,
             allowNull: true
         },
-        segment_length: {
+        max_qualif_repetitions: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
@@ -68,13 +52,21 @@ Segment.init(
                 key: "id",
             },
         },
+        previous_sibling_segment_id: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+                model: "segment",
+                key: "id",
+            },
+        }
     },
     {
         sequelize,
-        modelName: "Segment",
-        tableName: "segment",
-        timestamps: false,
+        modelName: "MessageContent",
+        tableName: "message_content",
+        timestamps: false
     }
-);
+)
 
-module.exports = Segment;
+module.exports = MessageContent;

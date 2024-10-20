@@ -1,8 +1,11 @@
 const { DataElement } = require("../models/associations");
+const { createWhereClause } = require("./helper_functions");
 
-exports.getAllDataElements = async (req, res) => {
+exports.getDataElements = async (req, res) => {
     try {
-        const dataElements = await DataElement.findAll();
+        const dataElements = await DataElement.findAll({
+            where: createWhereClause(req.query, DataElement)
+        });
         res.status(200).json(dataElements);
     } catch (err) {
         console.error("Error fetching data elements: ", err);
@@ -10,7 +13,6 @@ exports.getAllDataElements = async (req, res) => {
     }
 };
 
-// Controller for retrieving a single data element by ID
 exports.getDataElementById = async (req, res) => {
     try {
         const dataElement = await DataElement.findOne({
@@ -25,7 +27,6 @@ exports.getDataElementById = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
 
 exports.createDataElement = async (req, res) => {
     try {

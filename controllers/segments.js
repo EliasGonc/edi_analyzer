@@ -4,9 +4,10 @@ const { createWhereClause } = require("./helper_functions");
 exports.getAllSegments = async (req, res) => {
     try {
         const segments = await Segment.findAll({
+            where: createWhereClause(req.query, Segment),
             include: [
-                { model: Segment, as: "parent_segment" },  // Include the parent segment
-                { model: Segment, as: "sub_segments" }      // Include any subsegments
+                { model: Segment, as: "parent_segment" },
+                { model: Segment, as: "sub_segments" }
             ],
         });
         res.status(200).json(segments);

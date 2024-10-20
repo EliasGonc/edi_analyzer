@@ -1,11 +1,16 @@
 const sequelize = require("../db/connect");
-const { EdiStandard, MessageType, MessageVersion, EdiMessage, Segment, DataElement } = require("../models/associations.js");
-const { ediStandardSeeds } = require("./edi_standard_seeds");
-const { messageTypeSeeds } = require("./message_type_seeds");
-const { messageVersionSeeds } = require("./message_version_seeds");
-const { ediMessageSeeds } = require("./edi_message_seeds");
-const { segmentSeeds } = require("./segment_seeds");
-const { dataElementSeeds } = require("./data_elements_seeds");
+const {
+        EdiStandard, MessageType, MessageVersion, EdiMessage, Segment, DataElement,
+        MessageContent, SegmentContent
+    } = require("../models/associations.js");
+const ediStandardSeeds = require("./edi_standard_seeds");
+const messageTypeSeeds = require("./message_type_seeds");
+const messageVersionSeeds = require("./message_version_seeds");
+const ediMessageSeeds = require("./edi_message_seeds");
+const segmentSeeds = require("./segment_seeds");
+const dataElementSeeds = require("./data_elements_seeds");
+const messageContentSeeds = require("./message_contents_seeds.js");
+const segmentContentSeeds = require("./segment_contents.seeds.js");
 
 async function deleteRecordsAndReset(tableModel, hasOwnId = true) {
     try {
@@ -17,7 +22,7 @@ async function deleteRecordsAndReset(tableModel, hasOwnId = true) {
                 await sequelize.query(`ALTER SEQUENCE ${tableName}_id_seq RESTART WITH 1;`);
                 console.log(`Auto-increment of the column 'id' of the table '${tableName}' has been reset to 1.`);
             }
-        } catch (err) {
+        } catch (err) {     
             console.error(`Error deleting records of '${tableName}' table or resetting auto-increment: `, err);
         }
     } catch (err) {
@@ -27,7 +32,9 @@ async function deleteRecordsAndReset(tableModel, hasOwnId = true) {
 
 async function deleteRecordsAndResetAllTables() {
     try {
-        await deleteRecordsAndReset(EdiMessage, false);
+        await deleteRecordsAndReset(SegmentContent, false);
+        await deleteRecordsAndReset(MessageContent, false);
+        await deleteRecordsAndReset(EdiMessage);
         await deleteRecordsAndReset(MessageVersion);
         await deleteRecordsAndReset(MessageType);
         await deleteRecordsAndReset(EdiStandard);
@@ -52,6 +59,31 @@ async function seedTable(tableModel, data) {
     }
 }
 
+async function seedSegmentContent() {
+    const data = [];
+    for (let seedSegment of segmentContentSeeds) {
+        const segment = await Segment.findOne({
+            include: {
+                model: MessageVersion,
+                where: { name: seedSegment.version }
+            },
+            where: { code: seedSegment.segment }   
+        });
+        // for (let seedDataElement of seedSegment.data_elements) {
+        for (let i = 0; i < seedSegment.data_elements.length; i++) {
+            const seedDataElement = seedSegment.data_elements[i];
+            const dataElement = await DataElement.findOne({ where: { code: seedDataElement }});
+            data.push({
+                segment_id: segment.id,
+                data_element_id: dataElement.id,
+                position: i + 1,
+                usage: "mandatory"
+            });
+        }
+    }
+    seedTable(SegmentContent, data);
+}
+
 async function seedAllAppTables() {
     try {
         await seedTable(EdiStandard, ediStandardSeeds);
@@ -60,6 +92,8 @@ async function seedAllAppTables() {
         await seedTable(EdiMessage, ediMessageSeeds);
         await seedTable(Segment, segmentSeeds);
         await seedTable(DataElement, dataElementSeeds);
+        await seedTable(MessageContent, messageContentSeeds);
+        await seedSegmentContent();
     } catch (err) {
         console.error("Error seeding one of the app tables: ", err);
     }

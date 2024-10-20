@@ -21,27 +21,34 @@ const compareTwoArrays = function(first, second) {
     return true;
 }
 
-const validateRequestAttribute = function(requestData, fields) {
+const validateRequestAttributes = function(requestData, model) {
     let errorString = "";
-    for (let field of fields) {
-        if (!requestData[field]) {
-            errorString += `${field}; `;
+    const newData = {};
+    const attributesObject = model.getAttributes();
+    for (let attribute of Object.keys(attributesObject)) {
+        if(attribute !== "id") {
+            if (!requestData[attribute] && !attributesObject[attribute].allowNull) {
+                errorString += `${attribute}; `;
+            } else {
+                newData[attribute] = requestData[attribute];
+            }
         }
     }
-    if (errorString) {
-        throw new Error("Missing IDs: " + errorString);
-    }
+    if (errorString) throw new Error("Missing required attributes: " + errorString);
+    return newData;
 }
 
-const createWhereClause = function(requestData, fields) {
+const createWhereClause = function(requestData, model) {
     const whereClause = {};
-    for (let field of fields) {
-        const requestFieldValue = requestData[field];
-        if (requestFieldValue) { 
-            whereClause[field] = requestFieldValue;
+    for (let attribute of Object.keys(model.getAttributes())) {
+        if (attribute !== "id") {
+            const requestFieldValue = requestData[attribute];
+            if (requestFieldValue) { 
+                whereClause[attribute] = requestFieldValue;
+            }
         }
     }
     return whereClause;
 }
 
-module.exports = { compareTwoArrays, validateRequestAttribute, createWhereClause };
+module.exports = { compareTwoArrays, validateRequestAttributes, createWhereClause };

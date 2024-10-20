@@ -5,4 +5,4 @@ const ediMessageSeeds = [
         message_version_id: 1
     }
 ];
-module.exports = { ediMessageSeeds };
+module.exports = ediMessageSeeds;

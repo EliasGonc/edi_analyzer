@@ -21,11 +21,11 @@ MessageVersion.init(
         },
         message_type_id: {
             type: DataTypes.INTEGER,
+            allowNull: true,
             references: {
                 model: MessageType,
                 key: "id",
-            },
-            allowNull: true
+            }
         },
     },
     {

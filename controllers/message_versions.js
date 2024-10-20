@@ -1,18 +1,12 @@
 // const MessageVersion = require("../models/message_version");
 const { MessageVersion } = require("../models/associations");
+const { createWhereClause } = require("./helper_functions");
 
-exports.getAllMessageVersions = async (req, res) => {
-    const { edi_standard_id } = req.query;
+exports.getMessageVersions = async (req, res) => {
     try {
-        if (!edi_standard_id) {
-            res.json(await MessageVersion.findAll());
-        } else {
-            res.json(await MessageVersion.findAll({
-                where: {
-                    edi_standard_id: edi_standard_id
-                }
-            }));
-        }
+        res.json(await MessageVersion.findAll({
+            where: createWhereClause(req.query, MessageVersion)
+        }));
     } catch (err) {
         console.error("Error fetching message versions:", err);
         res.status(500).json({ error: "Internal server error" });

@@ -3,7 +3,7 @@ const ediStandardController = require("../controllers/edi_standards");
 
 const router = express.Router();
 
-router.get("/edi-standards", ediStandardController.getAllEdiStandards);
+router.get("/edi-standards", ediStandardController.getEdiStandards);
 router.get("/edi-standards/:id", ediStandardController.getEdiStandardById);
 router.post("/edi-standards", ediStandardController.createEdiStandard);
 router.put("/edi-standards/:id", ediStandardController.updateEdiStandard);

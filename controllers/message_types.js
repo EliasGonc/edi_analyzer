@@ -1,18 +1,12 @@
 // const MessageType = require("../models/message_type");
 const { MessageType } = require("../models/associations");
+const { createWhereClause } = require("./helper_functions");
 
-exports.getAllMessageTypes = async (req, res) => {
-    const { edi_standard_id } = req.query;
+exports.getMessageTypes = async (req, res) => {
     try {
-        if (!edi_standard_id) {
-            res.json(await MessageType.findAll());
-        } else {
-            res.json(await MessageType.findAll({
-                where: {
-                    edi_standard_id: edi_standard_id
-                }
-            }));
-        }
+        res.json(await MessageType.findAll({
+            where: createWhereClause(req.query, MessageType)
+        }));
     } catch (err) {
         console.error("Error fetching message types:", err);
         res.status(500).json({ error: "Internal server error" });

@@ -7,9 +7,13 @@ const MessageVersion = require("./message_version");
 class EdiMessage extends Model {}
 
 EdiMessage.init({
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
     edi_standard_id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         references: {
             model: EdiStandard,
             key: "id"
@@ -17,7 +21,6 @@ EdiMessage.init({
     },
     message_type_id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         references: {
             model: MessageType,
             key: "id"
@@ -25,7 +28,6 @@ EdiMessage.init({
     },
     message_version_id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         references: {
             model: MessageVersion,
             key: "id"
