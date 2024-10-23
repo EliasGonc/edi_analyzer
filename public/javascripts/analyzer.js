@@ -37,23 +37,24 @@ form.standard.addEventListener("change", async function() {
 
 form.type.addEventListener("change", async function() {
     const dbMessageType = await axios.get(`/api/message-types?name=${this.value}`);
-    console.log(dbMessageType.data);
     const dbMessageVersions = await axios.get(`/api/message-versions?message_type_id=${dbMessageType.data[0].id}`);
     updateOptions(form.version, dbMessageVersions.data);
 });
 
 form.validatationForm.addEventListener("submit", async event => {
     event.preventDefault();
-    console.log("Hey");
-    const dbData = await axios.post('/analyze-message', {
-        data: {
-            standard: form.standard.value,
-            type: form.type.value,
-            version: form.version.value,
-            autoDetect: form.autoDetect.value,
-            message: form.message.value
-        }
-    });
-    console.log("Ho");
-    console.log(dbData);
+    try {
+        const dbData = await axios.post('/analyze-message', {
+            data: {
+                standard: form.standard.value,
+                type: form.type.value,
+                version: form.version.value,
+                autoDetect: form.autoDetect.value,
+                message: form.message.value
+            }
+        });
+        console.log(dbData);
+    } catch (err) {
+        console.error("Error: ", err);
+    }
 });

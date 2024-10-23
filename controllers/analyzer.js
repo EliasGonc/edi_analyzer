@@ -10,22 +10,56 @@ const segmentContentController = require("./segment_contents");
 */
 const sequelize = require("../db/connect");
 const axios = require("../axiosInstance");
+const { create } = require("../models/edi_standard");
+
+const createQueryString = function(params) {
+    let queryString = "?";
+    for (let param in params) {
+        console.log(param);
+        queryString += `${param}=${params[param]}&`
+    }
+    return queryString.substring(0, queryString.length - 1);
+}
+
+const getAxiosResponseData = async function(method, url, params, index = undefined) {
+    try {
+        console.log(params);
+        console.log(`${url}${createQueryString(params)}`);
+        const axiosResponse = await axios({
+            method: method,
+            url: `${url}${createQueryString(params)}`
+        });
+        if (index) {
+            return axiosResponse.data;
+        }
+        return axiosResponse.data[index];
+    } catch (err) { 
+        console.error("Error getting Axios response data: ", err);
+    }
+}
 
 const getDatabaseData = async req => {
-    const db = {}
+    const db = {};
     try {
-        db.ediStandard = await axios.get("/api/edi-standards", { params: { name: req.body.standard } });
-        db.messageType = await axios.get("/api/message-types", {
-            params: { name: req.body.type, edi_standard_id: db.ediStandard.data[0].id }
+        db.ediStandard = await getAxiosResponseData("get", "/api/edi-standards", {
+            name: req.body.standard
+        }, 0);
+        db.messageType = await getAxiosResponseData("get", "/api/message-types", {
+            name: req.body.type,
+            edi_standard_id: db.ediStandard.id
+        }, 0);
+        db.messageVersion = await getAxiosResponseData("get", "/api/message-versions", {
+            name: req.body.version,
+            message_type_id: db.messageType.id
+        }, 0);
+        db.ediMessage = await getAxiosResponseData("get", "/api/edi-messages", {
+            edi_standard_id: db.ediStandard.id,
+            message_type_id: db.messageType.id,
+            message_version_id: db.messageVersion.id
+        }, 0);
+        db.messageContent = await getAxiosResponseData("get", "/api/message-contents", {
+            edi_message_id: db.ediMessage.id
         });
-        db.messageVersion = await axios.get("/api/message-versions", { params:
-            { name: req.body.version, message_type_id: db.messageType.data[0].id }
-        });
-        db.ediMessage = await axios.get("/api/edi-messages", { params: {
-            edi_standard_id: db.ediStandard.data[0].id,
-            message_type_id: db.messageType.data[0].id,
-            message_version_id: db.messageVersion.data[0].id
-        }});
         return db;
     } catch (err) {
         console.error("Error fetching database data: ", err);
@@ -35,11 +69,5 @@ const getDatabaseData = async req => {
 
 exports.analyzeMessage = async function(req, res) {
     const data = await getDatabaseData(req);
-    return data;
-    /*
-    console.log(data.ediStandard.data);
-    console.log(data.messageType.data);
-    console.log(data.messageVersion.data);
-    console.log(data.ediMessage.data);
-    */
+    res.status(200).json(data);
 }
