@@ -15,7 +15,6 @@ const { create } = require("../models/edi_standard");
 const createQueryString = function(params) {
     let queryString = "?";
     for (let param in params) {
-        console.log(param);
         queryString += `${param}=${params[param]}&`
     }
     return queryString.substring(0, queryString.length - 1);
@@ -23,13 +22,11 @@ const createQueryString = function(params) {
 
 const getAxiosResponseData = async function(method, url, params, index = undefined) {
     try {
-        console.log(params);
-        console.log(`${url}${createQueryString(params)}`);
         const axiosResponse = await axios({
             method: method,
-            url: `${url}${createQueryString(params)}`
+            url: `${url}${ params ? createQueryString(params) : ""}`
         });
-        if (index) {
+        if (index === undefined) {
             return axiosResponse.data;
         }
         return axiosResponse.data[index];
@@ -38,7 +35,7 @@ const getAxiosResponseData = async function(method, url, params, index = undefin
     }
 }
 
-const getDatabaseData = async req => {
+const getDatabaseData = async (req, res) => {
     const db = {};
     try {
         db.ediStandard = await getAxiosResponseData("get", "/api/edi-standards", {
@@ -57,17 +54,50 @@ const getDatabaseData = async req => {
             message_type_id: db.messageType.id,
             message_version_id: db.messageVersion.id
         }, 0);
-        db.messageContent = await getAxiosResponseData("get", "/api/message-contents", {
+        db.messageContents = await getAxiosResponseData("get", "/api/message-contents", {
             edi_message_id: db.ediMessage.id
         });
+        /*
+        db.ediMessage.contents = await getAxiosResponseData("get", "/api/message-contents", {
+            edi_message_id: db.ediMessage.id
+        });
+        */
+        db.segments = [];
+        db.segmentContents = [];
+        for (let messageContent of db.messageContents) {
+            db.segments.push(await getAxiosResponseData("get", 
+                `/api/segments/${messageContent.segment_id}`
+            ));
+            db.segmentContents.push(...await getAxiosResponseData("get",
+                "/api/segment-contents", { segment_id: messageContent.segment_id }
+            ));
+        }
+        db.dataElements = [];
+        
+            /*
+        for (let messageContent of db.ediMessage.contents) {
+            messageContent.segment = { info: [], contents: [] };
+            messageContent.segment.info = await getAxiosResponseData("get",
+                `/api/segments/${messageContent.segment_id}`
+            );
+            messageContent.segment.contents = await getAxiosResponseData("get",
+                "/api/segment-contents", { segment_id: messageContent.segment_id }
+            );
+            for (let segmentContent of messageContent.segment.contents) {
+                segmentContent.dataElement = await getAxiosResponseData("get", 
+                    "/api/data-elements", { data_element_id: segmentContent.data_element_id }
+                );
+            }
+        }*/
         return db;
     } catch (err) {
         console.error("Error fetching database data: ", err);
-        res.static(500).json("Internal server error");
+        res.status(500).json("Internal server error");
     }
 }
 
 exports.analyzeMessage = async function(req, res) {
     const data = await getDatabaseData(req);
+    // console.log(data);
     res.status(200).json(data);
 }

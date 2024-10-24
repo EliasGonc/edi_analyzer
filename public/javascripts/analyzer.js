@@ -6,6 +6,7 @@ form.version = document.querySelector("#version");
 form.autoDetect = document.querySelector("#autoDetect");
 form.message = document.querySelector("#message");
 
+
 const createNewOption = function(text, value, hidden = false) {
     const newOption = document.createElement("option");
     newOption.innerText = text;
@@ -41,18 +42,12 @@ form.type.addEventListener("change", async function() {
     updateOptions(form.version, dbMessageVersions.data);
 });
 
-form.validatationForm.addEventListener("submit", async event => {
+form.validatationForm.addEventListener("submit", async function(event) {
     event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
     try {
-        const dbData = await axios.post('/analyze-message', {
-            data: {
-                standard: form.standard.value,
-                type: form.type.value,
-                version: form.version.value,
-                autoDetect: form.autoDetect.value,
-                message: form.message.value
-            }
-        });
+        const dbData = await axios.post('/analyze-message', data);
         console.log(dbData);
     } catch (err) {
         console.error("Error: ", err);
