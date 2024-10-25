@@ -31,3 +31,7 @@ p.segment>span.data-element:hover {
 #results {
 
 }
+
+#message {
+    height: 15em;
+}

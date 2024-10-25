@@ -35,61 +35,95 @@ const getAxiosResponseData = async function(method, url, params, index = undefin
     }
 }
 
+const createMessageObject = function(databaseData) {
+    const ediMessage = {};
+    ediMessage.id = databaseData.ediMessage.id;
+    ediMessage.standard = databaseData.ediStandard;
+    ediMessage.type = databaseData.messageType;
+    ediMessage.version = databaseData.messageVersion;
+    ediMessage.contents = databaseData.messageContents;
+}
+
 const getDatabaseData = async (req, res) => {
     const db = {};
+    // const ediMessage = {};
     try {
-        db.ediStandard = await getAxiosResponseData("get", "/api/edi-standards", {
+        /*
+        await sequelize.query(`
+                SELECT edi_message.id
+                  FROM edi_message
+            INNER JOIN edi_standard    ON edi_standard.id = edi_message.edi_standard_id
+            INNER JOIN message_type    ON message_type.id = edi_message.message_type_id
+            INNER JOIN message_version ON message_version.id = edi_message.message_version_id
+                 WHERE edi_standard.name = '${req.body.standard}'
+                       AND message_type.name = '${req.body.type}'
+                       AND message_version.name = '${req.body.version}'
+        `, { type: sequelize.QueryTypes.SELECT })
+            .then(results => ediMessage.id = results[0])
+            .catch(err => console.log(err));
+        ediMessage.standard = await getAxiosResponseData("get", "/api/edi-standards", {
             name: req.body.standard
         }, 0);
-        db.messageType = await getAxiosResponseData("get", "/api/message-types", {
+        ediMessage.type = await getAxiosResponseData("get", "/api/message-types", {
             name: req.body.type,
-            edi_standard_id: db.ediStandard.id
+            edi_standard_id: ediMessage.standard.id
         }, 0);
-        db.messageVersion = await getAxiosResponseData("get", "/api/message-versions", {
+        ediMessage.version = await getAxiosResponseData("get", "/api/message-versions", {
             name: req.body.version,
-            message_type_id: db.messageType.id
+            message_type_id: ediMessage.type.id
+        }, 0);
+        await sequelize.query(`
+                SELECT 
+                  FROM message_content
+            INNER JOIN segment ON segment.id = message_content.segment_id
+                 WHERE message_content.edi_message_id = '${ediMessage.id}'
+                   AND segment 
+        `)
+            .then()
+            .catch();
+        */
+        db.standard = await getAxiosResponseData("get", "/api/edi-standards", {
+            name: req.body.standard
+        }, 0);
+        db.type = await getAxiosResponseData("get", "/api/message-types", {
+            name: req.body.type,
+            edi_standard_id: db.standard.id
+        }, 0);
+        db.version = await getAxiosResponseData("get", "/api/message-versions", {
+            name: req.body.version,
+            message_type_id: db.type.id
         }, 0);
         db.ediMessage = await getAxiosResponseData("get", "/api/edi-messages", {
-            edi_standard_id: db.ediStandard.id,
-            message_type_id: db.messageType.id,
-            message_version_id: db.messageVersion.id
+            edi_standard_id: db.standard.id,
+            message_type_id: db.type.id,
+            message_version_id: db.version.id
         }, 0);
         db.messageContents = await getAxiosResponseData("get", "/api/message-contents", {
             edi_message_id: db.ediMessage.id
         });
-        /*
-        db.ediMessage.contents = await getAxiosResponseData("get", "/api/message-contents", {
-            edi_message_id: db.ediMessage.id
-        });
-        */
         db.segments = [];
         db.segmentContents = [];
         for (let messageContent of db.messageContents) {
-            db.segments.push(await getAxiosResponseData("get", 
-                `/api/segments/${messageContent.segment_id}`
-            ));
+            const segmentId = messageContent.segment_id;
+            const segment = await getAxiosResponseData("get", `/api/segments/${segmentId}`);
+            if (!db.segments.some(segment => segment.id === segmentId)) {
+                db.segments.push(segment);
+            }
             db.segmentContents.push(...await getAxiosResponseData("get",
                 "/api/segment-contents", { segment_id: messageContent.segment_id }
             ));
         }
         db.dataElements = [];
-        
-            /*
-        for (let messageContent of db.ediMessage.contents) {
-            messageContent.segment = { info: [], contents: [] };
-            messageContent.segment.info = await getAxiosResponseData("get",
-                `/api/segments/${messageContent.segment_id}`
+        for (let segmentContent of db.segmentContents) {
+            const dataElement = await getAxiosResponseData("get", 
+                `/api/data-elements/${segmentContent.data_element_id}`
             );
-            messageContent.segment.contents = await getAxiosResponseData("get",
-                "/api/segment-contents", { segment_id: messageContent.segment_id }
-            );
-            for (let segmentContent of messageContent.segment.contents) {
-                segmentContent.dataElement = await getAxiosResponseData("get", 
-                    "/api/data-elements", { data_element_id: segmentContent.data_element_id }
-                );
+            if (!db.dataElements.some(element => element.id === dataElement.id)) {
+                db.dataElements.push(dataElement);
             }
-        }*/
+        }
         return db;
+        // return ediMessage;
     } catch (err) {
         console.error("Error fetching database data: ", err);
         res.status(500).json("Internal server error");
@@ -98,6 +132,5 @@ const getDatabaseData = async (req, res) => {
 
 exports.analyzeMessage = async function(req, res) {
     const data = await getDatabaseData(req);
-    // console.log(data);
     res.status(200).json(data);
 }
