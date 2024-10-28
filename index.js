@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-// const axios = require("axios");
 const sequelize = require("./db/connect");
 const ejsMate = require("ejs-mate");
 const axios = require("./axiosInstance");
@@ -36,7 +35,7 @@ const axiosConfigForApi = {
 app.get("/", async (req, res) => {
   try {
     const ediStandards = await axios.get("/edi-standards", axiosConfigForApi );
-    res.render("analyzer", { ediStandards: ediStandards.data });
+    res.render("analyzer/index", { ediStandards: ediStandards.data });
   } catch (err) {
     console.error("Error when rendering EDI Analyzer page", err.stack);
   }
@@ -63,20 +62,6 @@ sequelize.sync()
       console.error("Error syncing database", err);
     })
 
-/*
-app.get("/", async (req, res) => {
-    try {
-      const edi_standards = await db.pool.query("SELECT * FROM edi_standard");
-      const message_types = await db.pool.query("SELECT * FROM message_type")
-      res.render("index", {
-        edi_standards: edi_standards.rows,
-        message_types: message_types.rows
-      });
-    } catch (err) {
-      console.error("Error when querying the database", err.stack);
-    }
-});
-*/
 app.listen(8000, () => {
     console.log("Listening on port 8000");
 });

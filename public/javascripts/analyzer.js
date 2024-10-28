@@ -8,6 +8,13 @@ form.message = document.querySelector("#message");
 form.clearBtn = document.querySelector("#clearMessage");
 form.submit = document.querySelector("#submit");
 
+const modal = {}
+modal.itself = document.querySelector("#analyzerModal");
+modal.title = document.querySelector("#analyzerModal .modal-title");
+modal.body = document.querySelector("#analyzerModal .modal-body>p");
+
+let dbData;
+
 const createNewOption = function(text, value, hidden = false) {
     const newOption = document.createElement("option");
     newOption.innerText = text;
@@ -39,25 +46,31 @@ const checkFormRequirements = function() {
     }
 }
 
-const getDbData = async function(form) {
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    try {
-         const dbData = await axios.post('/analyze-message', data);
-         return dbData.data;
-    } catch (err) {
-        console.error("Error getting database data: ", err);
+const updateAndShowModal = function(modalData) {
+    modal.title.textContent = modalData.title;
+    modal.body.textContent = modalData.body;
+    const bsModal = new bootstrap.Modal(modal.itself);
+    bsModal.show();
+}
+
+const processServerData = function(serverData) {
+    if(serverData.modal !== "") {
+        updateAndShowModal(serverData.modal);
     }
-
 }
 
-const checkMessageHeader = function(standard, type, version, message) {
-    regex = {};
-    standard.regex = new RegExp(standard.identifier);
-    type.regex = new RegExp(type.identifier);
-    version.regex = new RegExp(version.identifier);
-    return standard.regex.test(message) && type.regex.test(message) && version.regex.test(message);
-}
+// const getDbData = async function(form) {
+//     const formData = new FormData(form);
+//     const data = Object.fromEntries(formData.entries());
+//     console.log(data);
+//     try {
+//          const dbData = await axios.post('/analyze-message', data);
+//          return dbData.data;
+//     } catch (err) {
+//         console.error("Error getting database data: ", err);
+//     }
+// }
+
 
 form.standard.addEventListener("change", async function() {
     const dbEdiStandard = await axios.get(`/api/edi-standards?name=${this.value}`);
@@ -94,8 +107,15 @@ form.clearBtn.addEventListener("click", function() {
 
 form.validatationForm.addEventListener("submit", async function(event) {
     event.preventDefault();
-    const dbData = await getDbData(event.target);
-    if (!checkMessageHeader(dbData.standard, dbData.type, dbData.version, form.message.value)) {
-        
+    const formData = new FormData(form.validatationForm);
+    const requestData = Object.fromEntries(formData.entries());
+    try {
+         const responseData = await axios.post('/analyze-message', requestData);
+         processServerData(responseData.data);
+         console.log(responseData.data);
+        //  console.log(responseData.data);
+    } catch (err) {
+        console.error("Error getting server  data: ", err);
     }
 });
+

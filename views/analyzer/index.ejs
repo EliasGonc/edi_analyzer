@@ -12,7 +12,7 @@
         <div class="input-group">
           <span class="input-group-text">EDI Standard</span>
           <select class="form-select" name="standard" id="standard">
-            <option disabled selected value="" class="option-hidden"></option>
+            <!-- <option disabled selected value="" class="option-hidden"></option> -->
             <% for (let ediStandard of ediStandards) { %>
             <option value="<%= ediStandard.name %>"><%= ediStandard.name %></option>
             <% } %>
@@ -24,10 +24,9 @@
         <label class="visually-hidden" for="type">Message type</label>
         <div class="input-group">
           <span class="input-group-text">Message type</span>
-          <select class="form-select" name="type" id="type"></select>
-          <div class="invalid-feedback">
-            Select a message type
-          </div>
+          <select class="form-select" name="type" id="type">
+            <option value="001">001</option>
+          </select>
         </div>
       </div>
 
@@ -35,7 +34,9 @@
         <label class="visually-hidden" for="version">Version</label>
         <div class="input-group">
           <span class="input-group-text">Version</span>
-          <select class="form-select" name="version" id="version"></select>
+          <select class="form-select" name="version" id="version">
+            <option value="60">60</option>
+          </select>
         </div>
       </div>
 
@@ -45,7 +46,7 @@
       </div>
 
       <div class="col-12 form-floating">
-        <textarea class="form-control" placeholder="Type or paste a message here" id="message">
+        <textarea class="form-control" placeholder="Type or paste a message here" id="message" name="message">
 ITP00160000002410180128015910442201038460476884000268        AJL1    VOLKSWAGEN DO BRASIL LTDA                      AJL1        
 PE1057000000166241018         000000    2QB   201797A                                           23043977    57   GEINALDO DUPC0P
 PE22410160004586741   241016000000200000000000383300000000003849000000000000000011 00000000REC.MO 0000S                         
@@ -60,7 +61,7 @@ FTP00000000000008
 
       <div class="col-12 d-flex">
         <div>
-          <button class="btn btn-secondary" type="submit" disabled id="submit">Validate</button>
+          <button class="btn btn-secondary" type="submit" id="submit">Validate</button>
           <button class="btn btn-secondary" type="reset" id="clearMessage">Clear message</button>
         </div>
       </div>
@@ -74,4 +75,21 @@ FTP00000000000008
   </section>
   
   <button type="button" class="btn btn-secondary">Show human readable version</button>
+
+  <div class="modal" tabindex="-1" id="analyzerModal">
+    <%- include("../partials/modal") %> 
+    <!--
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p></p>
+        </div>
+      </div>
+    </div>
+    -->
+  </div>
 </main>
