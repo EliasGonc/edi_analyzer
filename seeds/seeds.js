@@ -30,21 +30,36 @@ async function dropAllTables() {
 
 async function seedSegmentContent() {
     const data = [];
-    for (let seedSegment of segmentContentSeeds) {
+    for (let segmentContentSeed of segmentContentSeeds) {
         const segment = await Segment.findOne({
             include: {
                 model: MessageVersion,
-                where: { name: seedSegment.version }
+                where: { name: segmentContentSeed.version }
             },
-            where: { code: seedSegment.segment }   
+            where: { code: segmentContentSeed.segment }   
         });
-        for (let i = 0; i < seedSegment.data_elements.length; i++) {
-            const seedDataElement = seedSegment.data_elements[i];
-            const dataElement = await DataElement.findOne({ where: { code: seedDataElement }});
+        let remainingCharacters = segment.segment_length;
+        let i;
+        for (i = 0; i < segmentContentSeed.data_elements.length; i++) {
+            const dataElementSeed = segmentContentSeed.data_elements[i];
+            const dataElement = await DataElement.findOne({ where: { code: dataElementSeed }});
             data.push({
                 segment_id: segment.id,
                 data_element_id: dataElement.id,
                 position: i + 1
+            });
+            remainingCharacters -= dataElement.fixed_length;
+        }
+        if (remainingCharacters > 0) {
+            const blankDataElement = await DataElement.findOne({ where: { code: "9999" }});
+            data.push({
+                segment_id: segment.id,
+                data_element_id: blankDataElement.id,
+                position: i + 1,
+                fixed_length: remainingCharacters,
+                possible_values: blankDataElement.possible_values.map(regex => {
+                    return regex.replace("REMAINDER", remainingCharacters)
+                })
             });
         }
     }

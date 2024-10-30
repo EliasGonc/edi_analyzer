@@ -5,7 +5,7 @@ const EdiMessage = require("./edi_message");
 const Segment = require("./segment");
 const DataElement = require("./data_element");
 const EdiMessageContent = require("./edi_message_content");
-const SegmentContent = require("./segment_contents");
+const SegmentContent = require("./segment_content");
 
 EdiStandard.hasMany(MessageType, { foreignKey: "edi_standard_id" });
 MessageType.belongsTo(EdiStandard, { foreignKey: "edi_standard_id" });

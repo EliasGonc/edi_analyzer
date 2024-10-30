@@ -186,7 +186,7 @@ const analyzeSegment = function(segment, dbData) {
 
 const getCurrentSegmentData = function(userMessageSegment, segmentContents) {
     const currentSegment = {};
-    currentSegment.userContents = userMessageSegment.contents;
+    currentSegment.userContents = userMessageSegment.content;
     currentSegment.dbContents = segmentContents.filter(
         content => content.segment_id === userMessageSegment.segment.id
     );
@@ -195,45 +195,52 @@ const getCurrentSegmentData = function(userMessageSegment, segmentContents) {
 }
 
 const resolveDataElementData = function(segmentContent, dataElement) {
-    const resolvedDataElement = { ...dataElement };
-    resolvedDataElement.usage = segmentContent.usage ? segmentContent.usage : dataElement.usage;
-    resolvedDataElement.fixed_length = segmentContent.fixed_length
-        ? segmentContent.fixed_length
-        : dataElement.fixed_length;
-    resolvedDataElement.minimum_length = segmentContent.minimum_length
-        ? segmentContent.minimum_length
-        : dataElement.minimum_length;
-    resolvedDataElement.maximum_length = segmentContent.maximum_length
-        ? segmentContent.maximum_length
-        : dataElement.maximum_length;
-    resolvedDataElement.possible_values = segmentContent.possible_values
-        ? segmentContent.possible_values
-        : dataElement.possible_values;
+    const resolvedDataElement = { ...dataElement.dataValues };
+    const columns = [ "usage", "fixed_length", "minimum_length", "maximum_length", "possible_values" ];
+    for (let column of columns) {
+        if (segmentContent.dataValues[column] !== null) {
+            resolvedDataElement[column] = segmentContent.dataValues[column];
+        }
+    }
     return resolvedDataElement;
 }
 
-const analyzeUserMessage = async function(segmentedUserMessage, dbData) {
+/**
+* Analyzes the user message and returns an array with the analysis results
+* @param {Array} segmentedUserMessage - An array where each entry contains an object with the user message segment raw segment contents and the segment information
+* @param {Array} dbData - An array containing the database information of all elements of an EDI messages
+* @param {Array} responseData - An array that will contain the analysis of the user message, since this function is recursive
+*/
+const analyzeUserMessage = async function(segmentedUserMessage, dbData, responseData) {
     const { segmentContents, dataElements } = dbData;
     const currentSegment = getCurrentSegmentData(segmentedUserMessage[0], segmentContents);
-    const responseData = [];
+    responseData.push({ segment: currentSegment, dataElements: [] });
     for (let content of currentSegment.dbContents) {
-        const currentElement = resolveDataElementData(content, dataElements.find(
+        const currentElement = resolveDataElementData(content, await dataElements.find(
             element => element.id === content.data_element_id
         ));
         let isValid = true;
+        const dataElementValue = currentSegment.userContents.substring(
+            currentSegment.cursor,
+            currentSegment.cursor + currentElement.fixed_length
+        );
+        currentSegment.cursor += currentElement.fixed_length;
         for (let possible_value of currentElement.possible_values) {
             const regex = new RegExp(possible_value);
-            if (!regex.test(currentSegment.userContents.substring(currentSegment.cursor, currentElement.fixed_length))) {
-                isValid = false;
-            }
+            if (!regex.test(dataElementValue)) isValid = false;
         }
-        responseData.push({
+        responseData[responseData.length - 1].dataElements.push({
             element: toTitleCase(currentElement.name),
             description: currentElement.description,
-            possibleValues: currentElement.possible_values
+            length: currentElement.fixed_length,
+            value: dataElementValue,
+            possibleValues: currentElement.possible_values,
+            isValid
         });
     }
-    return responseData;
+    if (segmentedUserMessage.length > 1) {
+        await analyzeUserMessage(segmentedUserMessage.slice(1), dbData, responseData);
+    }
 }
 
 exports.analyzeMessage = async function(req, res) {
@@ -244,9 +251,10 @@ exports.analyzeMessage = async function(req, res) {
         responseJson.modal = { title: errorMessage.title, body: errorMessage.message };
     } else {
         try {
+            const responseData = [];
             const segmentedMessage = await segmentUserMessage(req.body.message, dbData);
-            const messageAnalysis = await analyzeUserMessage(segmentedMessage, dbData);
-            responseJson.analysis = messageAnalysis;
+            await analyzeUserMessage(segmentedMessage, dbData, responseData);
+            responseJson.analysis = responseData;
         } catch (err) {
             responseJson.modal = { title: err.title, body: err.message };
         }

@@ -27,7 +27,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6, 
         maximum_length: 6, 
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "5",
@@ -47,7 +47,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6, 
         maximum_length: 6, 
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "7",
@@ -107,7 +107,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "14",
@@ -117,7 +117,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6, 
         maximum_length: 6, 
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "15",
@@ -137,7 +137,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14,
         maximum_length: 14,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "17",
@@ -147,7 +147,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14, 
         maximum_length: 14, 
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "18",
@@ -207,7 +207,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4,
         maximum_length: 4,
-        possible_values: [ "([0-1]\d|2[0-3])([0-1]\d|2[0-3])" ]
+        possible_values: [ "([0-1]\\d|2[0-3])([0-1]\\d|2[0-3])" ]
     },
     {
         code: "24",
@@ -217,7 +217,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "24",
@@ -227,7 +227,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "25",
@@ -237,7 +237,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9,
         maximum_length: 9,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "26",
@@ -307,7 +307,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "31",
@@ -317,7 +317,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "33",
@@ -327,7 +327,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3, 
         maximum_length: 3, 
-        possible_values: [ "[0-9 ]{3}" ]
+        possible_values: [ "\\d{3}" ]
     },
     {
         code: "34",
@@ -337,7 +337,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ "[0-9 ]{2}" ]
+        possible_values: [ "\\d{2}" ]
     },
     {
         code: "35",
@@ -347,7 +347,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12,
         maximum_length: 12,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)([0-1]\d|2[0-3])([0-5]\d)([0-5]\d)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)([0-1]\\d|2[0-3])([0-5]\\d)([0-5]\\d)" ]
     },
     {
         code: "36",
@@ -397,7 +397,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2,
         maximum_length: 2,
-        possible_values: [ "([0-1]\d|2[0-3])" ]
+        possible_values: [ "([0-1]\\d|2[0-3])" ]
     },
     {
         code: "41",
@@ -537,7 +537,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "391",
@@ -787,7 +787,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|30|31)" ]
+        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
     },
     {
         code: "645",
@@ -797,7 +797,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ "([0-1]\d|2[0-3])([0-5]\d)" ]
+        possible_values: [ "([0-1]\\d|2[0-3])([0-5]\\d)" ]
     },
     {
         code: "646",
@@ -836,7 +836,7 @@ const dataElementSeeds = [
         usage: "mandatory", 
         minimum_length: 1, 
         maximum_length: 128, 
-        possible_values: [ " {1,128}" ]
+        possible_values: [ "[ ]{REMAINDER}" ]
     }
 ]
 
