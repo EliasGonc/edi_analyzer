@@ -1,4 +1,4 @@
-const messageContentSeeds = [
+const ediMessageContentSeeds = [
     {
         edi_message_id: 1,
         segment_id: 1,
@@ -49,4 +49,4 @@ const messageContentSeeds = [
     }
 ];
 
-module.exports = messageContentSeeds;
+module.exports = ediMessageContentSeeds;

@@ -1,7 +1,7 @@
 const sequelize = require("../db/connect");
 const {
         EdiStandard, MessageType, MessageVersion, EdiMessage, Segment, DataElement,
-        MessageContent, SegmentContent
+        EdiMessageContent, SegmentContent
     } = require("../models/associations.js");
 const { dropTable, seedTable } = require("../db/helper_functions.js");
 const ediStandardSeeds = require("./edi_standard_seeds");
@@ -10,13 +10,13 @@ const messageVersionSeeds = require("./message_version_seeds");
 const ediMessageSeeds = require("./edi_message_seeds");
 const segmentSeeds = require("./segment_seeds");
 const dataElementSeeds = require("./data_elements_seeds");
-const messageContentSeeds = require("./message_contents_seeds.js");
-const segmentContentSeeds = require("./segment_contents.seeds.js");
+const ediMessageContentSeeds = require("./edi_message_content_seeds.js");
+const segmentContentSeeds = require("./segment_content_seeds.js");
 
 async function dropAllTables() {
     try {
         await dropTable(SegmentContent);
-        await dropTable(MessageContent);
+        await dropTable(EdiMessageContent);
         await dropTable(EdiMessage);
         await dropTable(MessageVersion);
         await dropTable(MessageType);
@@ -44,8 +44,7 @@ async function seedSegmentContent() {
             data.push({
                 segment_id: segment.id,
                 data_element_id: dataElement.id,
-                position: i + 1,
-                usage: "mandatory"
+                position: i + 1
             });
         }
     }
@@ -60,7 +59,7 @@ async function seedAllAppTables() {
         await seedTable(EdiMessage, ediMessageSeeds);
         await seedTable(Segment, segmentSeeds);
         await seedTable(DataElement, dataElementSeeds);
-        await seedTable(MessageContent, messageContentSeeds);
+        await seedTable(EdiMessageContent, ediMessageContentSeeds);
         await seedSegmentContent();
     } catch (err) {
         console.error("Error seeding one of the app tables: ", err);

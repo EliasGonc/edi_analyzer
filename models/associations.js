@@ -4,8 +4,8 @@ const MessageVersion = require("./message_version");
 const EdiMessage = require("./edi_message");
 const Segment = require("./segment");
 const DataElement = require("./data_element");
-const MessageContent = require("./message_content");
-const SegmentContent = require("./segment_content");
+const EdiMessageContent = require("./edi_message_content");
+const SegmentContent = require("./segment_contents");
 
 EdiStandard.hasMany(MessageType, { foreignKey: "edi_standard_id" });
 MessageType.belongsTo(EdiStandard, { foreignKey: "edi_standard_id" });
@@ -25,8 +25,8 @@ Segment.belongsTo(MessageVersion, { foreignKey: "message_version_id" });
 Segment.belongsTo(Segment, { as: "parent_segment", foreignKey: "parent_segment_id" });
 Segment.hasMany(Segment, { as: "sub_segments", foreignKey: "parent_segment_id" });
 
-EdiMessage.belongsToMany(Segment, { through: MessageContent, foreignKey: "edi_message_id" });
-Segment.belongsToMany(EdiMessage, { through: MessageContent,foreignKey: "segment_id" });
+EdiMessage.belongsToMany(Segment, { through: EdiMessageContent, foreignKey: "edi_message_id" });
+Segment.belongsToMany(EdiMessage, { through: EdiMessageContent,foreignKey: "segment_id" });
 
 /*
 Segment.belongsToMany(DataElement, { through: SegmentContent, foreignKey: "segment_id" });
@@ -39,5 +39,5 @@ DataElement.hasMany(SegmentContent, { foreignKey: 'data_element_id', onDelete: '
 
 module.exports = { 
     EdiStandard, MessageType, MessageVersion, EdiMessage,
-    Segment, DataElement, MessageContent, SegmentContent
+    Segment, DataElement, EdiMessageContent, SegmentContent
 };

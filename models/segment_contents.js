@@ -30,13 +30,16 @@ SegmentContent.init(
         },
         usage: {
             type: USAGE_ENUM,
-            allowNull: false,
+            allowNull: true,
             default: "mandatory"
+        },
+        fixed_length: {
+            type: DataTypes.INTEGER,
+            allowNull: true
         },
         minimum_length: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1
+            allowNull: true
         },
         maximum_length: {
             type: DataTypes.INTEGER,

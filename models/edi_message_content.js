@@ -4,9 +4,9 @@ const { USAGE_ENUM } = require("./usage_enum");
 const EdiMessage = require("./edi_message");
 const Segment = require("./segment");
 
-class MessageContent extends Model {};
+class EdiMessageContent extends Model {};
 
-MessageContent.init(
+EdiMessageContent.init(
     {
         edi_message_id: {
             type: DataTypes.INTEGER,
@@ -63,10 +63,10 @@ MessageContent.init(
     },
     {
         sequelize,
-        modelName: "MessageContent",
-        tableName: "message_content",
+        modelName: "EdiMessageContent",
+        tableName: "edi_message_content",
         timestamps: false
     }
 )
 
-module.exports = MessageContent;
+module.exports = EdiMessageContent;

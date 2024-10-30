@@ -11,7 +11,7 @@ const messageVersionRoutes = require("./routes/message_versions");
 const ediMessageRoutes = require("./routes/edi_messages");
 const segmentRoutes = require("./routes/segments");
 const dataElementRoutes = require("./routes/data_elements");
-const messageContentRoutes = require("./routes/message_contents");
+const ediMessageContentRoutes = require("./routes/edi_message_contents");
 const segmentContentRoutes = require("./routes/segment_contents");
 const analyzerRoutes = require("./routes/analyzer");
 
@@ -49,7 +49,7 @@ app.use("/api",
   ediMessageRoutes,
   segmentRoutes,
   dataElementRoutes,
-  messageContentRoutes,
+  ediMessageContentRoutes,
   segmentContentRoutes,
 );
 app.use("/", analyzerRoutes);

@@ -1,9 +1,9 @@
-const sequelize = require("../db/connect");
 const { EdiStandard, MessageType, MessageVersion, EdiMessage,
-    Segment, DataElement, MessageContent, SegmentContent } = require("../models/associations");
+    Segment, DataElement, EdiMessageContent, SegmentContent } = require("../models/associations");
 const ErrorMessage = require("../models/error_message");
 const axios = require("../axiosInstance");
 const { create } = require("../models/edi_standard");
+const { removeLineFeeds, toTitleCase } = require("../utils/stringUtils");
 
 const createQueryString = function(params) {
     let queryString = "?";
@@ -103,7 +103,7 @@ const getDatabaseData = async function(req, res) {
             message_type_id: data.type.id,
             message_version_id: data.version.id
         }});
-        data.messageContents = await MessageContent.findAll({ where: {
+        data.messageContents = await EdiMessageContent.findAll({ where: {
             edi_message_id: data.ediMessage.id
         }});
         data.segments = [];
@@ -112,9 +112,10 @@ const getDatabaseData = async function(req, res) {
             const segmentId = messageContent.segment_id;
             if (!data.segments.some(segment => segment.id === segmentId)) {
                 data.segments.push(await Segment.findByPk(segmentId));
-                data.segmentContents.push(...await SegmentContent.findAll({ where: {
-                    segment_id: segmentId }
-                }));
+                data.segmentContents.push(...await SegmentContent.findAll(
+                    { where: { segment_id: segmentId } },
+                    { order: [[ "position", "ASC" ]] }
+                ));
             }
         }
         data.dataElements = [];
@@ -147,45 +148,93 @@ const parseErrorMessage = async function(errorId) {
     return errorMessage;
 }
 
-const removeNewLines = function(message) {
-    return message.replace(/[\r\n]/g, "");
-}
-
-const segmentMessage = async function(message, dbData) {
+const segmentUserMessage = async function(userMessage, dbData) {
     const { segments, ediMessage } = dbData;
-    message = removeNewLines(message);
-    const segmentedMessage = [];
-    while(message) {
+    userMessage = removeLineFeeds(userMessage);
+    const segmentedUserMessage = [];
+    while(userMessage) {
         let hasUnknownSegment = true;
         for (let segment of segments) {
             const pattern = new RegExp(`^${segment.code}`)
-            if (message.search(pattern) === 0) {
+            if (userMessage.search(pattern) === 0) {
                 hasUnknownSegment = false;
-                segmentedMessage.push({
+                segmentedUserMessage.push({
                     segment: segment,
-                    content: message.slice(
+                    content: userMessage.slice(
                         segment.code.length,
                         segment.segment_length - segment.code.length
                     )
                 });
-                message = message.slice(segment.segment_length)
+                userMessage = userMessage.slice(segment.segment_length)
             }
         }
         if (hasUnknownSegment) {
-            const unknownSegmentcode = message.substring(0, ediMessage.segment_code_length);
-            const errorMessage = await parseErrorMessage(2, unknownSegmentcode);
+            const unknownSegmentCode = userMessage.substring(0, ediMessage.segment_code_length);
+            const errorMessage = await parseErrorMessage(2, unknownSegmentCode);
             const error = new Error(errorMessage.message);
             error.title = errorMessage.title;
             throw error;
         };
     }
-    return segmentedMessage;
+    return segmentedUserMessage;
 }
 
-const analyzeMessage = function(message, dbData) {
-    const segmentedMessage = segmentMessage(message, dbData.segments);
+const analyzeSegment = function(segment, dbData) {
+    const { segmentContents, dataElements } = dbData;
+    for (let segmentContent of segmentContents ) {}
 }
 
+const getCurrentSegmentData = function(userMessageSegment, segmentContents) {
+    const currentSegment = {};
+    currentSegment.userContents = userMessageSegment.contents;
+    currentSegment.dbContents = segmentContents.filter(
+        content => content.segment_id === userMessageSegment.segment.id
+    );
+    currentSegment.cursor = 0;
+    return currentSegment;
+}
+
+const resolveDataElementData = function(segmentContent, dataElement) {
+    const resolvedDataElement = { ...dataElement };
+    resolvedDataElement.usage = segmentContent.usage ? segmentContent.usage : dataElement.usage;
+    resolvedDataElement.fixed_length = segmentContent.fixed_length
+        ? segmentContent.fixed_length
+        : dataElement.fixed_length;
+    resolvedDataElement.minimum_length = segmentContent.minimum_length
+        ? segmentContent.minimum_length
+        : dataElement.minimum_length;
+    resolvedDataElement.maximum_length = segmentContent.maximum_length
+        ? segmentContent.maximum_length
+        : dataElement.maximum_length;
+    resolvedDataElement.possible_values = segmentContent.possible_values
+        ? segmentContent.possible_values
+        : dataElement.possible_values;
+    return resolvedDataElement;
+}
+
+const analyzeUserMessage = async function(segmentedUserMessage, dbData) {
+    const { segmentContents, dataElements } = dbData;
+    const currentSegment = getCurrentSegmentData(segmentedUserMessage[0], segmentContents);
+    const responseData = [];
+    for (let content of currentSegment.dbContents) {
+        const currentElement = resolveDataElementData(content, dataElements.find(
+            element => element.id === content.data_element_id
+        ));
+        let isValid = true;
+        for (let possible_value of currentElement.possible_values) {
+            const regex = new RegExp(possible_value);
+            if (!regex.test(currentSegment.userContents.substring(currentSegment.cursor, currentElement.fixed_length))) {
+                isValid = false;
+            }
+        }
+        responseData.push({
+            element: toTitleCase(currentElement.name),
+            description: currentElement.description,
+            possibleValues: currentElement.possible_values
+        });
+    }
+    return responseData;
+}
 
 exports.analyzeMessage = async function(req, res) {
     const dbData = await getDatabaseData(req, res);
@@ -195,8 +244,9 @@ exports.analyzeMessage = async function(req, res) {
         responseJson.modal = { title: errorMessage.title, body: errorMessage.message };
     } else {
         try {
-            const segmentedMessage = await segmentMessage(req.body.message, dbData);
-            responseJson.analysis = segmentedMessage;
+            const segmentedMessage = await segmentUserMessage(req.body.message, dbData);
+            const messageAnalysis = await analyzeUserMessage(segmentedMessage, dbData);
+            responseJson.analysis = messageAnalysis;
         } catch (err) {
             responseJson.modal = { title: err.title, body: err.message };
         }
