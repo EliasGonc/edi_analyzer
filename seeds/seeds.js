@@ -1,9 +1,9 @@
 const sequelize = require("../db/connect");
 const {
-        EdiStandard, MessageType, MessageVersion, EdiMessage, Segment, DataElement,
-        EdiMessageContent, SegmentContent
-    } = require("../models/associations.js");
-const { dropTable, seedTable } = require("../db/helper_functions.js");
+    EdiStandard, MessageType, MessageVersion, EdiMessage, Segment, DataElement,
+    EdiMessageContent, SegmentContent
+} = require("../models/associations.js");
+const { dropTable, seedTable } = require("../db/utils.js");
 const ediStandardSeeds = require("./edi_standard_seeds");
 const messageTypeSeeds = require("./message_type_seeds");
 const messageVersionSeeds = require("./message_version_seeds");
@@ -24,7 +24,7 @@ async function dropAllTables() {
         await dropTable(Segment);
         await dropTable(DataElement);
     } catch (err) {
-        console.error("Error when dropping the app tables");
+        console.error("Error when dropping the app tables: ", err);
     }
 }
 
@@ -63,7 +63,7 @@ async function seedSegmentContent() {
             });
         }
     }
-    seedTable(SegmentContent, data);
+    await seedTable(SegmentContent, data);
 }
 
 async function seedAllAppTables() {

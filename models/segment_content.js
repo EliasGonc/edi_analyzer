@@ -2,7 +2,7 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
 const Segment = require("./segment");
 const DataElement = require("./data_element");
-const { USAGE_ENUM } = require("./usage_enum");
+// const { USAGE_ENUM } = require("./usage_enum");
 
 class SegmentContent extends Model {};
 
@@ -29,9 +29,15 @@ SegmentContent.init(
             primaryKey: true
         },
         usage: {
-            type: USAGE_ENUM,
-            allowNull: true,
-            default: "mandatory"
+            // type: USAGE_ENUM,
+            // allowNull: true,
+            // default: "mandatory"
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "mandatory",
+            validate: {
+                isIn: [['mandatory', 'optional', 'conditional']]
+            }
         },
         fixed_length: {
             type: DataTypes.INTEGER,
@@ -45,10 +51,22 @@ SegmentContent.init(
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        // possible_values: {
+        //     type: DataTypes.ARRAY(DataTypes.STRING),
+        //     allowNull: true
+        // },
         possible_values: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true
+            type: DataTypes.TEXT,
+            allowNull: true,
+            get() {
+                const rawValue = this.getDataValue('possible_values');
+                return rawValue ? JSON.parse(rawValue) : null;
+            },
+            set(value) {
+                this.setDataValue('possible_values', JSON.stringify(value));
+            }
         },
+
     },
     {
         sequelize,

@@ -1,7 +1,7 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
 const MessageVersion = require("./message_version");
-const { USAGE_ENUM } = require("./usage_enum");
+// const { USAGE_ENUM } = require("./usage_enum");
 
 class Segment extends Model {}
 
@@ -13,7 +13,8 @@ Segment.init(
             primaryKey: true,
         },
         code: {
-            type: DataTypes.STRING(10),
+            // type: DataTypes.STRING(10),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         message_version_id: {
@@ -25,7 +26,8 @@ Segment.init(
             }
         },
         name: {
-            type: DataTypes.STRING(100),
+            // type: DataTypes.STRING(100),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         description: {
@@ -33,8 +35,13 @@ Segment.init(
             allowNull: true
         },
         usage: {
-            type: USAGE_ENUM,
+            // type: USAGE_ENUM,
+            type: DataTypes.STRING,
+            allowNull: false,
             defaultValue: "mandatory",
+            validate: {
+                isIn: [['mandatory', 'optional', 'conditional']]
+            }
         },
         min_repetitions: {
             type: DataTypes.INTEGER,

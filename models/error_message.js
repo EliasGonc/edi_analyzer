@@ -12,11 +12,16 @@ ErrorMessage.init(
             allowNull: false
         },
         type: {
-            type: DataTypes.ENUM('format'),
-            allowNull: false
+            // type: DataTypes.ENUM('format'),
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                isIn: [['format']]
+            }
         },
         title: {
-            type: DataTypes.STRING(100),
+            // type: DataTypes.STRING(100),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         message: {

@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
-const { USAGE_ENUM } = require("./usage_enum");
+// const { USAGE_ENUM } = require("./usage_enum");
 
 class DataElement extends Model {}
 
@@ -12,11 +12,13 @@ DataElement.init(
             primaryKey: true,
         },
         code: {
-            type: DataTypes.STRING(20),
+            // type: DataTypes.STRING(20),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         name: {
-            type: DataTypes.STRING(100),
+            // type: DataTypes.STRING(100),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         description: {
@@ -24,8 +26,15 @@ DataElement.init(
             allowNull: true
         },
         usage: {
-            type: USAGE_ENUM,
+            // type: USAGE_ENUM,
+            // allowNull: false,
+            type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: "mandatory",
+            validate: {
+                isIn: [['mandatory', 'optional', 'conditional']]
+            }
+
         },
         fixed_length: {
             type: DataTypes.INTEGER,
@@ -39,9 +48,20 @@ DataElement.init(
             type: DataTypes.INTEGER,
             allowNull: true
         },
+        // possible_values: {
+        //     type: DataTypes.ARRAY(DataTypes.STRING),
+        //     allowNull: true
+        // },
         possible_values: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true
+            type: DataTypes.TEXT,
+            allowNull: true,
+            get() {
+                const rawValue = this.getDataValue('possible_values');
+                return rawValue ? JSON.parse(rawValue) : null;
+            },
+            set(value) {
+                this.setDataValue('possible_values', JSON.stringify(value));
+            }
         },
     },
     {

@@ -256,9 +256,9 @@ exports.analyzeMessage = async function(req, res) {
             await analyzeUserMessage(segmentedMessage, dbData, responseData);
             responseJson.analysis = responseData;
         } catch (err) {
+            console.error(err);
             responseJson.modal = { title: err.title, body: err.message };
         }
-        // analyzeMessage(req.body.message, dbData);
     }
     res.status(200).json(responseJson);
 }

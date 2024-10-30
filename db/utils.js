@@ -1,8 +1,10 @@
 async function dropTable(tableModel) {
     try {
-        tableName = tableModel.getTableName();
+        const tableName = tableModel.getTableName();
         try {
-            await tableModel.drop({ cascade: true });
+            // await tableModel.drop({ cascade: true }); // PostgreSQL
+            await tableModel.drop(); // SQLite
+            console.log(`Table ${tableName} dropped successfully.`);
         } catch (err) {
             console.error(`Error dropping table ${tableName}.`);
         }
@@ -13,12 +15,13 @@ async function dropTable(tableModel) {
 
 async function deleteRecordsAndReset(tableModel, hasOwnId = true) {
     try {
-        tableName = tableModel.getTableName();
+        const tableName = tableModel.getTableName();
         try {
             await tableModel.destroy({ where: {} });
             console.log(`All records of the table '${tableName}' have been deleted.`);
             if (hasOwnId) {
-                await sequelize.query(`ALTER SEQUENCE ${tableName}_id_seq RESTART WITH 1;`);
+                // await sequelize.query(`ALTER SEQUENCE ${tableName}_id_seq RESTART WITH 1;`); // PostgreSQL
+                await sequelize.query(`DELETE FROM sqlite_sequence WHERE name='${tableName}';`); //SQLite
                 console.log(`Auto-increment of the column 'id' of the table '${tableName}' has been reset to 1.`);
             }
         } catch (err) {     

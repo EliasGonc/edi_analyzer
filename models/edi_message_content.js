@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
-const { USAGE_ENUM } = require("./usage_enum");
+// const { USAGE_ENUM } = require("./usage_enum");
 const EdiMessage = require("./edi_message");
 const Segment = require("./segment");
 
@@ -25,8 +25,12 @@ EdiMessageContent.init(
             }
         },
         usage: {
-            type: USAGE_ENUM,
-            allowNull: true
+            // type: USAGE_ENUM,
+            type: DataTypes.STRING,
+            allowNull: true,
+            validate: {
+                isIn: [['mandatory', 'optional', 'conditional']]
+            }
         },
         min_repetitions: {
             type: DataTypes.INTEGER,
