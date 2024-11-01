@@ -56,15 +56,15 @@ SegmentContent.init(
         //     allowNull: true
         // },
         possible_values: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
             allowNull: true,
-            get() {
-                const rawValue = this.getDataValue('possible_values');
-                return rawValue ? JSON.parse(rawValue) : null;
-            },
-            set(value) {
-                this.setDataValue('possible_values', JSON.stringify(value));
-            }
+            // get() {
+            //     const rawValue = this.getDataValue('possible_values');
+            //     return rawValue ? JSON.parse(rawValue) : null;
+            // },
+            // set(value) {
+            //     this.setDataValue('possible_values', JSON.stringify(value));
+            // }
         },
 
     },

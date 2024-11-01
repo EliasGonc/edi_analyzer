@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 
+// PostgreSQL
 /*
 const sequelize = new Sequelize('edi_analyzer', 'edi_admin', 'tSy9QmVERuTB2G67', {
     host: 'localhost',
@@ -7,22 +8,10 @@ const sequelize = new Sequelize('edi_analyzer', 'edi_admin', 'tSy9QmVERuTB2G67',
 });
 */
 
+// SQLite
 const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: './db/database.sqlite'
 });
 
 module.exports = sequelize;
-/*
-const { Pool } = require("pg");
-
-const pool = new Pool({
-    user: "edi_admin",
-    password: "247139",
-    host: "localhost",
-    port: "5432",
-    database: "edi_analyzer"
-});
-
-module.exports = { pool };
-*/

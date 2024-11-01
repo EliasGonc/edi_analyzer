@@ -7,7 +7,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3, 
         maximum_length: 3, 
-        possible_values: [ ".{3}" ]
+        possible_values: ".{3}"
     },
     {
         code: "3",
@@ -17,7 +17,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9, 
         maximum_length: 9, 
-        possible_values: [ ".{9}" ]
+        possible_values: ".{9}"
     },
     {
         code: "4",
@@ -27,7 +27,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6, 
         maximum_length: 6, 
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "5",
@@ -37,7 +37,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9,
         maximum_length: 9,
-        possible_values: [ ".{9}" ]
+        possible_values: ".{9}"
     },
     {
         code: "6",
@@ -47,7 +47,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6, 
         maximum_length: 6, 
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "7",
@@ -57,7 +57,7 @@ const dataElementSeeds = [
         fixed_length: 30,
         minimum_length: 30, 
         maximum_length: 30, 
-        possible_values: [ ".{30}" ]
+        possible_values: ".{30}"
     },
     {
         code: "8",
@@ -67,7 +67,7 @@ const dataElementSeeds = [
         fixed_length: 30,
         minimum_length: 30, 
         maximum_length: 30, 
-        possible_values: [ ".{30}" ]
+        possible_values: ".{30}"
     },
     {
         code: "9",
@@ -77,7 +77,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ ".{12}" ]
+        possible_values: ".{12}"
     },
     {
         code: "10",
@@ -87,7 +87,7 @@ const dataElementSeeds = [
         fixed_length: 5,
         minimum_length: 5, 
         maximum_length: 5, 
-        possible_values: [ ".{5}" ]
+        possible_values: ".{5}"
     },
     {
         code: "11",
@@ -97,7 +97,7 @@ const dataElementSeeds = [
         fixed_length: 11,
         minimum_length: 11, 
         maximum_length: 11, 
-        possible_values: [ ".{11}" ]
+        possible_values: ".{11}"
     },
     {
         code: "12",
@@ -107,7 +107,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "14",
@@ -117,7 +117,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6, 
         maximum_length: 6, 
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "15",
@@ -127,7 +127,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12,
         maximum_length: 12,
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "16",
@@ -137,7 +137,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14,
         maximum_length: 14,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "17",
@@ -147,7 +147,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14, 
         maximum_length: 14, 
-        possible_values: [ "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "18",
@@ -157,7 +157,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "19",
@@ -167,7 +167,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ ".{2}" ]
+        possible_values: ".{2}"
     },
     {
         code: "20",
@@ -177,7 +177,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3, 
         maximum_length: 3, 
-        possible_values: [ ".{3}" ]
+        possible_values: ".{3}"
     },
     {
         code: "21",
@@ -187,7 +187,7 @@ const dataElementSeeds = [
         fixed_length: 7,
         minimum_length: 7, 
         maximum_length: 7, 
-        possible_values: [ ".{7}" ]
+        possible_values: ".{7}"
     },
     {
         code: "22",
@@ -197,7 +197,7 @@ const dataElementSeeds = [
         fixed_length: 1,
         minimum_length: 1, 
         maximum_length: 1, 
-        possible_values: [ "[0-9 ]{1}" ]
+        possible_values: "[0-9 ]{1}"
     },
     {
         code: "23",
@@ -207,7 +207,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4,
         maximum_length: 4,
-        possible_values: [ "([0-1]\\d|2[0-3])([0-1]\\d|2[0-3])" ]
+        possible_values: "([0-1]\\d|2[0-3])([0-1]\\d|2[0-3])"
     },
     {
         code: "24",
@@ -217,7 +217,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "24",
@@ -227,7 +227,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "25",
@@ -237,7 +237,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9,
         maximum_length: 9,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "26",
@@ -247,7 +247,7 @@ const dataElementSeeds = [
         fixed_length: 30,
         minimum_length: 30, 
         maximum_length: 30, 
-        possible_values: [ ".{30}" ]
+        possible_values: ".{30}"
     },
     {
         code: "27",
@@ -257,7 +257,7 @@ const dataElementSeeds = [
         fixed_length: 30,
         minimum_length: 30, 
         maximum_length: 30, 
-        possible_values: [ ".{30}" ]
+        possible_values: ".{30}"
     },
     {
         code: "28",
@@ -267,7 +267,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12,
         maximum_length: 12,
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "28",
@@ -277,7 +277,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "29",
@@ -287,7 +287,7 @@ const dataElementSeeds = [
         fixed_length: 40,
         minimum_length: 40, 
         maximum_length: 40, 
-        possible_values: [ ".{40}" ]
+        possible_values: ".{40}"
     },
     {
         code: "29",
@@ -297,7 +297,7 @@ const dataElementSeeds = [
         fixed_length: 40,
         minimum_length: 40, 
         maximum_length: 40, 
-        possible_values: [ ".{40}" ]
+        possible_values: ".{40}"
     },
     {
         code: "30",
@@ -307,7 +307,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "31",
@@ -317,7 +317,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "33",
@@ -327,7 +327,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3, 
         maximum_length: 3, 
-        possible_values: [ "\\d{3}" ]
+        possible_values: "\\d{3}"
     },
     {
         code: "34",
@@ -337,7 +337,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ "\\d{2}" ]
+        possible_values: "\\d{2}"
     },
     {
         code: "35",
@@ -347,7 +347,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12,
         maximum_length: 12,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)([0-1]\\d|2[0-3])([0-5]\\d)([0-5]\\d)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)([0-1]\\d|2[0-3])([0-5]\\d)([0-5]\\d)"
     },
     {
         code: "36",
@@ -357,7 +357,7 @@ const dataElementSeeds = [
         fixed_length: 5,
         minimum_length: 5, 
         maximum_length: 5, 
-        possible_values: [ "[0-9 ]{5}" ]
+        possible_values: "[0-9 ]{5}"
     },
     {
         code: "37",
@@ -367,7 +367,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14, 
         maximum_length: 14, 
-        possible_values: [ "[0-9 ]{14}" ]
+        possible_values: "[0-9 ]{14}"
     },
     {
         code: "38",
@@ -377,7 +377,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14, 
         maximum_length: 14, 
-        possible_values: [ ".{14}" ]
+        possible_values: ".{14}"
     },
     {
         code: "39",
@@ -387,7 +387,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9, 
         maximum_length: 9, 
-        possible_values: [ "[0-9 ]{9}" ]
+        possible_values: "[0-9 ]{9}"
     },
     {
         code: "40",
@@ -397,7 +397,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2,
         maximum_length: 2,
-        possible_values: [ "([0-1]\\d|2[0-3])" ]
+        possible_values: "([0-1]\\d|2[0-3])"
     },
     {
         code: "41",
@@ -407,7 +407,7 @@ const dataElementSeeds = [
         fixed_length: 30,
         minimum_length: 30, 
         maximum_length: 30, 
-        possible_values: [ ".{30}" ]
+        possible_values: ".{30}"
     },
     {
         code: "69",
@@ -417,7 +417,7 @@ const dataElementSeeds = [
         fixed_length: 1,
         minimum_length: 1, 
         maximum_length: 1, 
-        possible_values: [ ".{1}" ]
+        possible_values: ".{1}"
     },
     {
         code: "72",
@@ -427,7 +427,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12,
         maximum_length: 12,
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "74",
@@ -437,7 +437,7 @@ const dataElementSeeds = [
         fixed_length: 1,
         minimum_length: 1, 
         maximum_length: 1, 
-        possible_values: [ ".{1}" ]
+        possible_values: ".{1}"
     },
     {
         code: "113",
@@ -447,7 +447,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3, 
         maximum_length: 3, 
-        possible_values: [ ".{3}" ]
+        possible_values: ".{3}"
     },
     {
         code: "151",
@@ -457,7 +457,7 @@ const dataElementSeeds = [
         fixed_length: 8,
         minimum_length: 8, 
         maximum_length: 8, 
-        possible_values: [ ".{8}" ]
+        possible_values: ".{8}"
     },
     {
         code: "152",
@@ -467,7 +467,7 @@ const dataElementSeeds = [
         fixed_length: 8,
         minimum_length: 8, 
         maximum_length: 8, 
-        possible_values: [ ".{8}" ]
+        possible_values: ".{8}"
     },
     {
         code: "153",
@@ -477,7 +477,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ ".{2}" ]
+        possible_values: ".{2}"
     },
     {
         code: "154",
@@ -487,7 +487,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ ".{4}" ]
+        possible_values: ".{4}"
     },
     {
         code: "201",
@@ -497,7 +497,7 @@ const dataElementSeeds = [
         fixed_length: 1,
         minimum_length: 1, 
         maximum_length: 1, 
-        possible_values: [ ".{1}" ]
+        possible_values: ".{1}"
     },
     {
         code: "243",
@@ -507,7 +507,7 @@ const dataElementSeeds = [
         fixed_length: 25,
         minimum_length: 25, 
         maximum_length: 25, 
-        possible_values: [ ".{25}" ]
+        possible_values: ".{25}"
     },
     {
         code: "244",
@@ -517,7 +517,7 @@ const dataElementSeeds = [
         fixed_length: 25,
         minimum_length: 25, 
         maximum_length: 25, 
-        possible_values: [ ".{25}" ]
+        possible_values: ".{25}"
     },
     {
         code: "245",
@@ -527,7 +527,7 @@ const dataElementSeeds = [
         fixed_length: 17,
         minimum_length: 17, 
         maximum_length: 17, 
-        possible_values: [ "[0-9 ]{17}" ]
+        possible_values: "[0-9 ]{17}"
     },
     {
         code: "368",
@@ -537,7 +537,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "391",
@@ -547,7 +547,7 @@ const dataElementSeeds = [
         fixed_length: 1,
         minimum_length: 1,
         maximum_length: 1,
-        possible_values: [ ".{1}" ]
+        possible_values: ".{1}"
     },
     {
         code: "409",
@@ -557,7 +557,7 @@ const dataElementSeeds = [
         fixed_length: 13,
         minimum_length: 13, 
         maximum_length: 13, 
-        possible_values: [ ".{13}" ]
+        possible_values: ".{13}"
     },
     {
         code: "433",
@@ -567,7 +567,7 @@ const dataElementSeeds = [
         fixed_length: 1,
         minimum_length: 1, 
         maximum_length: 1, 
-        possible_values: [ ".{1}" ]
+        possible_values: ".{1}"
     },
     {
         code: "434",
@@ -577,7 +577,7 @@ const dataElementSeeds = [
         fixed_length: 1,
         minimum_length: 1, 
         maximum_length: 1, 
-        possible_values: [ ".{1}" ]
+        possible_values: ".{1}"
     },
     {
         code: "447",
@@ -587,7 +587,7 @@ const dataElementSeeds = [
         fixed_length: 10,
         minimum_length: 10, 
         maximum_length: 10, 
-        possible_values: [ "[0-9 ]{10}" ]
+        possible_values: "[0-9 ]{10}"
     },
     {
         code: "448",
@@ -597,7 +597,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ ".{4}" ]
+        possible_values: ".{4}"
     },
     {
         code: "449",
@@ -607,7 +607,7 @@ const dataElementSeeds = [
         fixed_length: 10,
         minimum_length: 10, 
         maximum_length: 10, 
-        possible_values: [ ".{10}" ]
+        possible_values: ".{10}"
     },
     {
         code: "459",
@@ -617,7 +617,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ ".{2}" ]
+        possible_values: ".{2}"
     },
     {
         code: "531",
@@ -627,7 +627,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ ".{12}" ]
+        possible_values: ".{12}"
     },
     {
         code: "532",
@@ -637,7 +637,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ "[0-9 ]{2}" ]
+        possible_values: "[0-9 ]{2}"
     },
     {
         code: "533",
@@ -647,7 +647,7 @@ const dataElementSeeds = [
         fixed_length: 30,
         minimum_length: 30,
         maximum_length: 30,
-        possible_values: [ ".{30}" ]
+        possible_values: ".{30}"
     },
     {
         code: "534",
@@ -657,7 +657,7 @@ const dataElementSeeds = [
         fixed_length: 20,
         minimum_length: 20, 
         maximum_length: 20, 
-        possible_values: [ ".{20}" ]
+        possible_values: ".{20}"
     },
     {
         code: "535",
@@ -667,7 +667,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "536",
@@ -677,7 +677,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "537",
@@ -687,7 +687,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "538",
@@ -697,7 +697,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ ".{2}" ]
+        possible_values: ".{2}"
     },
     {
         code: "539",
@@ -707,7 +707,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "541",
@@ -717,7 +717,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12,
         maximum_length: 12,
-        possible_values: [ "[0-9 ]{12}" ]
+        possible_values: "[0-9 ]{12}"
     },
     {
         code: "542",
@@ -727,7 +727,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3,
         maximum_length: 3,
-        possible_values: [ "[0-9 ]{3}" ]
+        possible_values: "[0-9 ]{3}"
     },
     {
         code: "543",
@@ -737,7 +737,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3,
         maximum_length: 3,
-        possible_values: [ "[0-9 ]{3}" ]
+        possible_values: "[0-9 ]{3}"
     },
     {
         code: "640",
@@ -747,7 +747,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14, 
         maximum_length: 14, 
-        possible_values: [ ".{14}" ]
+        possible_values: ".{14}"
     },
     {
         code: "641",
@@ -757,7 +757,7 @@ const dataElementSeeds = [
         fixed_length: 10,
         minimum_length: 10, 
         maximum_length: 10, 
-        possible_values: [ ".{10}" ]
+        possible_values: ".{10}"
     },
     {
         code: "642",
@@ -767,7 +767,7 @@ const dataElementSeeds = [
         fixed_length: 12,
         minimum_length: 12, 
         maximum_length: 12, 
-        possible_values: [ ".{12}" ]
+        possible_values: ".{12}"
     },
     {
         code: "643",
@@ -777,7 +777,7 @@ const dataElementSeeds = [
         fixed_length: 3,
         minimum_length: 3, 
         maximum_length: 3, 
-        possible_values: [ ".{3}" ]
+        possible_values: ".{3}"
     },
     {
         code: "644",
@@ -787,7 +787,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: [ "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)" ]
+        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
     },
     {
         code: "645",
@@ -797,7 +797,7 @@ const dataElementSeeds = [
         fixed_length: 4,
         minimum_length: 4, 
         maximum_length: 4, 
-        possible_values: [ "([0-1]\\d|2[0-3])([0-5]\\d)" ]
+        possible_values: "([0-1]\\d|2[0-3])([0-5]\\d)"
     },
     {
         code: "646",
@@ -807,7 +807,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9, 
         maximum_length: 9, 
-        possible_values: [ "[0-9 ]{9}" ]
+        possible_values: "[0-9 ]{9}"
     },
     {
         code: "648",
@@ -817,7 +817,7 @@ const dataElementSeeds = [
         fixed_length: 2,
         minimum_length: 2, 
         maximum_length: 2, 
-        possible_values: [ ".{2}" ]
+        possible_values: ".{2}"
     },
     {
         code: "663",
@@ -827,7 +827,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9, 
         maximum_length: 9, 
-        possible_values: [ "[0-9 ]{9}" ]
+        possible_values: "[0-9 ]{9}"
     },
     {
         code: "9999",
@@ -836,7 +836,7 @@ const dataElementSeeds = [
         usage: "mandatory", 
         minimum_length: 1, 
         maximum_length: 128, 
-        possible_values: [ "[ ]{REMAINDER}" ]
+        possible_values: "[ ]{REMAINDER}"
     }
 ]
 

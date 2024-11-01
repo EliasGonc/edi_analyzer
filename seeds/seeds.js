@@ -28,6 +28,38 @@ async function dropAllTables() {
     }
 }
 
+async function pushDataElements(data, segment, segmentContentSeed) {
+    let remainingCharacters = segment.segment_length - segment.code.length;
+    let i;
+    for (i = 0; i < segmentContentSeed.data_elements.length; i++) {
+        const dataElementSeed = segmentContentSeed.data_elements[i];
+        const dataElement = await DataElement.findOne({ where: { code: dataElementSeed }});
+        // console.log(`${segment.code} segment: ${remainingCharacters} characteres remaining. Pushing data element "${dataElement.name}" (${dataElement.fixed_length} characters)`);
+        data.push({
+            segment_id: segment.id,
+            data_element_id: dataElement.id,
+            position: i + 1
+        });
+        remainingCharacters -= dataElement.fixed_length;
+    }
+    // console.log(`${segment.code} segment: ${remainingCharacters} characteres remaining.`);
+    return { remainingCharacters, position: i };
+}
+
+async function pushBlankElement(data, remainingCharacters, position, segmentId) {
+    if (remainingCharacters > 0) {
+        const blankDataElement = await DataElement.findOne({ where: { code: "9999" }});
+        data.push({
+            segment_id: segmentId,
+            data_element_id: blankDataElement.id,
+            position: position + 1,
+            fixed_length: remainingCharacters,
+            possible_values: blankDataElement.possible_values
+                .replace("REMAINDER", remainingCharacters)
+        });
+    }
+}
+
 async function seedSegmentContent() {
     const data = [];
     for (let segmentContentSeed of segmentContentSeeds) {
@@ -38,30 +70,8 @@ async function seedSegmentContent() {
             },
             where: { code: segmentContentSeed.segment }   
         });
-        let remainingCharacters = segment.segment_length;
-        let i;
-        for (i = 0; i < segmentContentSeed.data_elements.length; i++) {
-            const dataElementSeed = segmentContentSeed.data_elements[i];
-            const dataElement = await DataElement.findOne({ where: { code: dataElementSeed }});
-            data.push({
-                segment_id: segment.id,
-                data_element_id: dataElement.id,
-                position: i + 1
-            });
-            remainingCharacters -= dataElement.fixed_length;
-        }
-        if (remainingCharacters > 0) {
-            const blankDataElement = await DataElement.findOne({ where: { code: "9999" }});
-            data.push({
-                segment_id: segment.id,
-                data_element_id: blankDataElement.id,
-                position: i + 1,
-                fixed_length: remainingCharacters,
-                possible_values: blankDataElement.possible_values.map(regex => {
-                    return regex.replace("REMAINDER", remainingCharacters)
-                })
-            });
-        }
+        const { remainingCharacters, position } = await pushDataElements(data, segment, segmentContentSeed);
+        await pushBlankElement(data, remainingCharacters, position, segment.id);
     }
     await seedTable(SegmentContent, data);
 }
