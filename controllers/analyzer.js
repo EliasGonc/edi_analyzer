@@ -46,12 +46,13 @@ const getDatabaseData = async function (req, res) {
             const segmentId = messageContent.segment_id;
             if (!data.segments.some(segment => segment.id === segmentId)) {
                 data.segments.push(await Segment.findByPk(segmentId));
-                data.segmentsContents.push(...await SegmentContent.findAll(
-                    { where: { segment_id: segmentId } },
-                    { order: [["segment_id", "ASC"], ["position", "ASC"]] }
-                ));
+                data.segmentsContents.push(...await SegmentContent.findAll({
+                    where: { segment_id: segmentId },
+                    order: [["position", "ASC"]]
+                }));
             }
         }
+        
         data.dataElements = [];
         for (let segmentContent of data.segmentsContents) {
             const dataElementId = segmentContent.data_element_id;
@@ -115,16 +116,16 @@ const segmentUserMessage = async function (userMessage, dbData) {
 
 const analyzeDataElement = function (responseData, segment, dataElement) {
     const regex = new RegExp(dataElement.data.possible_values);
-    const isValid = regex.test(dataElement.value);
+    dataElement.isValid = regex.test(dataElement.value);
     segment.cursor += dataElement.data.fixed_length;
-    responseData[responseData.length - 1].dataElements.push({
-        element: toTitleCase(dataElement.data.name),
-        description: dataElement.data.description,
-        length: dataElement.data.fixed_length,
-        value: dataElement.value,
-        possibleValues: dataElement.data.possible_values,
-        isValid
-    });
+    responseData.segments[responseData.segments.length - 1].dataElements.push({ dataElement });
+        // element: toTitleCase(dataElement.data.name),
+        // description: dataElement.data.description,
+        // length: dataElement.data.fixed_length,
+        // value: dataElement.value,
+        // possibleValues: dataElement.data.possible_values,
+        // isValid
+    // });
     return isValid;
 }
 
@@ -145,14 +146,13 @@ const analyzeSegment = function (responseData, segment, dbData) {
         dataElement.data = resolveDataElementData(content.dataValues, dbData.dataElements.find(
             dataElement => dataElement.dataValues.id === content.data_element_id
         ));
-        console.log(`${segment.data.code} segment, element #${content.position}, data element ${dataElement.data.code}`);
         dataElement.value = segment.value.substring(
             segment.cursor,
             segment.cursor + dataElement.data.fixed_length
         );
         const dataElementIsValid = analyzeDataElement(responseData, segment, dataElement);
         if (!dataElementIsValid) {
-            responseData[responseData.length-1].segment.hasError = true;
+            responseData.segments[responseData.segments.length - 1].hasError = true;
         }
     }
 }
@@ -179,7 +179,7 @@ const getCurrentSegmentData = function (userMessageSegment, dbData) {
 */
 const analyzeUserMessage = function (responseData, segmentedUserMessage, dbData) {
     const currentSegment = getCurrentSegmentData(segmentedUserMessage[0], dbData);
-    responseData.push({ segment: currentSegment, dataElements: [] });
+    responseData.segments.push({ ...currentSegment, dataElements: [] });
     analyzeSegment(responseData, currentSegment, dbData);
     if (segmentedUserMessage.length > 1) {
         analyzeUserMessage(responseData, segmentedUserMessage.slice(1), dbData);
@@ -188,13 +188,18 @@ const analyzeUserMessage = function (responseData, segmentedUserMessage, dbData)
 
 exports.analyzeMessage = async function (req, res) {
     const dbData = await getDatabaseData(req, res);
-    const responseJson = { analysis: "", modal: "" };
+    const responseJson = {
+        analysis: {
+            segments: []
+        },
+        modal: ""
+    };
     if (!checkMessageHeader(dbData.standard, dbData.type, dbData.version, req.body.message)) {
         const errorMessage = await parseErrorMessage(1, dbData.standard.name, dbData.type.name, dbData.version.name);
         responseJson.modal = { title: errorMessage.title, body: errorMessage.message };
     } else {
         try {
-            const responseData = [];
+            const responseData = { segments: [] };
             const segmentedMessage = await segmentUserMessage(req.body.message, dbData);
             analyzeUserMessage(responseData, segmentedMessage, dbData);
             responseJson.analysis = responseData;

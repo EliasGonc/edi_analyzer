@@ -47,7 +47,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6, 
         maximum_length: 6, 
-        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
+        possible_values: "((\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)|0{6})"
     },
     {
         code: "7",
