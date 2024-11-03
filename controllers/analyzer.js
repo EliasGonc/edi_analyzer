@@ -52,7 +52,7 @@ const getDatabaseData = async function (req, res) {
                 }));
             }
         }
-        
+
         data.dataElements = [];
         for (let segmentContent of data.segmentsContents) {
             const dataElementId = segmentContent.data_element_id;
@@ -118,15 +118,15 @@ const analyzeDataElement = function (responseData, segment, dataElement) {
     const regex = new RegExp(dataElement.data.possible_values);
     dataElement.isValid = regex.test(dataElement.value);
     segment.cursor += dataElement.data.fixed_length;
-    responseData.segments[responseData.segments.length - 1].dataElements.push({ dataElement });
-        // element: toTitleCase(dataElement.data.name),
-        // description: dataElement.data.description,
-        // length: dataElement.data.fixed_length,
-        // value: dataElement.value,
-        // possibleValues: dataElement.data.possible_values,
-        // isValid
+    responseData.segments[responseData.segments.length - 1].dataElements.push({ ...dataElement });
+    // element: toTitleCase(dataElement.data.name),
+    // description: dataElement.data.description,
+    // length: dataElement.data.fixed_length,
+    // value: dataElement.value,
+    // possibleValues: dataElement.data.possible_values,
+    // isValid
     // });
-    return isValid;
+    return dataElement.isValid;
 }
 
 const resolveDataElementData = function (segmentContent, dataElement) {
@@ -183,6 +183,43 @@ const analyzeUserMessage = function (responseData, segmentedUserMessage, dbData)
     analyzeSegment(responseData, currentSegment, dbData);
     if (segmentedUserMessage.length > 1) {
         analyzeUserMessage(responseData, segmentedUserMessage.slice(1), dbData);
+    }
+}
+
+const createRepetitionsText = function (min_repetitions, max_repetitions) {
+    if (min_repetitions === max_repetitions) {
+        return `exactly ${min_repetitions}`
+    } else if (max_repetitions === null) {
+        return `at least ${min_repetitions}`;
+    } else if (min_repetitions > max_repetitions) {
+        return `at least ${min_repetitions} and up to ${max_repetitions}`;
+    }
+    return "unknown";
+}
+
+const createElement = function (name, classes, content, popOver = null) {
+
+}
+
+const createResponseHtml = function (responseData) {
+    const responseHtml = [];
+    for (let segment of responseData.segments) {
+        const segmentHtmlContent = [
+            createElement("span", ["segment-info-dot"], "&#x2B24"),
+            createElement("span", ["data-element"], segment.data.code, {
+                title: segment.code,
+                content: {
+                    name: segment.name,
+                    usage: segment.usage,
+                    length: `${segment.segment_length} characters`,
+                    repetitions: createRepetitionsText(segment.min_repetitions, segment.max_repetitions),
+                    parantSegment: `${segment.parrent}`
+                }
+            })
+        ];
+        for (let dataElement of segments.dataElements) {
+            segmentHtmlContent.push(createElement("span", "data-element"))
+        }
     }
 }
 
