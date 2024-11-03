@@ -2,20 +2,11 @@ const express = require("express");
 const path = require("path");
 const sequelize = require("./db/connect");
 const ejsMate = require("ejs-mate");
-// const axios = require("./axiosInstance");
 
 // Models
 const { EdiStandard } = require("./models/associations");
 
 // Routes
-// const ediStandardRoutes = require("./routes/edi_standards");
-// const messageTypeRoutes = require("./routes/message_types");
-// const messageVersionRoutes = require("./routes/message_versions");
-// const ediMessageRoutes = require("./routes/edi_messages");
-// const segmentRoutes = require("./routes/segments");
-// const dataElementRoutes = require("./routes/data_elements");
-// const ediMessageContentRoutes = require("./routes/edi_message_contents");
-// const segmentContentRoutes = require("./routes/segment_contents");
 const analyzerRoutes = require("./routes/analyzer");
 
 // Express
@@ -29,33 +20,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//Axios
-// const axiosConfigForApi = {
-//   baseURL: "http://localhost:8000/api/"
-// }
-
 // Routes
 app.get("/", async (req, res) => {
   try {
-    // const ediStandards = await axios.get("/edi-standards", axiosConfigForApi );
-    // res.render("analyzer/index", { ediStandards: ediStandards.data });
     res.render("analyzer/index", { ediStandards: await EdiStandard.findAll({}) });
   } catch (err) {
     console.error("Error when rendering EDI Analyzer page", err.stack);
   }
 });
 
-// API routes
-// app.use("/api",
-//   ediStandardRoutes,
-//   messageTypeRoutes,
-//   messageVersionRoutes,
-//   ediMessageRoutes,
-//   segmentRoutes,
-//   dataElementRoutes,
-//   ediMessageContentRoutes,
-//   segmentContentRoutes,
-// );
 app.use("/", analyzerRoutes);
 
 sequelize.sync()

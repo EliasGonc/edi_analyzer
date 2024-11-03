@@ -132,12 +132,12 @@ const dataElementSeeds = [
     {
         code: "16",
         name: "cumulative deliv./ship. qty.",
-        description: 'Cumulative quantity of the item delivered/shipped from a deter- mined date until the date of the last delivery/shipment.',
+        description: 'Cumulative quantity of the item delivered/shipped from a determined date until the date of the last delivery/shipment.',
         usage: "optional",
         fixed_length: 14,
         minimum_length: 14,
         maximum_length: 14,
-        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
+        possible_values: "\\d{14}"
     },
     {
         code: "17",
@@ -147,7 +147,7 @@ const dataElementSeeds = [
         fixed_length: 14,
         minimum_length: 14, 
         maximum_length: 14, 
-        possible_values: "([0-9 ]{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
+        possible_values: "\\d{14}"
     },
     {
         code: "18",
@@ -217,17 +217,7 @@ const dataElementSeeds = [
         fixed_length: 6,
         minimum_length: 6,
         maximum_length: 6,
-        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
-    },
-    {
-        code: "24",
-        name: "item delivery/shipment date",
-        description: 'Date for the delivery/shipment of the item. When this field does not contain a date, its contents must be aligned between the  parties.',
-        usage: "optional",
-        fixed_length: 6,
-        minimum_length: 6,
-        maximum_length: 6,
-        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
+        possible_values: "(0{6}|2{6}|3{6}|4{6}|5{6}|(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31))"
     },
     {
         code: "25",
@@ -237,7 +227,7 @@ const dataElementSeeds = [
         fixed_length: 9,
         minimum_length: 9,
         maximum_length: 9,
-        possible_values: "(\\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\\d|30|31)"
+        possible_values: "\\d{9}"
     },
     {
         code: "26",

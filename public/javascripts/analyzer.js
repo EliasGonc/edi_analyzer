@@ -13,6 +13,8 @@ modal.itself = document.querySelector("#analyzerModal");
 modal.title = document.querySelector("#analyzerModal .modal-title");
 modal.body = document.querySelector("#analyzerModal .modal-body>p");
 
+const resultsSection = document.querySelector("#results");
+
 let dbData;
 
 const createNewOption = function(text, value, hidden = false) {
@@ -46,31 +48,29 @@ const checkFormRequirements = function() {
     }
 }
 
-const updateAndShowModal = function(modalData) {
-    modal.title.textContent = modalData.title;
-    modal.body.textContent = modalData.body;
+const updateAndShowModal = function(results) {
+    modal.itself.innerHTML = results;
     const bsModal = new bootstrap.Modal(modal.itself);
     bsModal.show();
 }
 
-const processServerData = function(serverData) {
-    if(serverData.modal !== "") {
-        updateAndShowModal(serverData.modal);
+const updateResults = async function(results) {
+    let paragraph = resultsSection.lastElementChild;
+    while (paragraph) {
+        resultsSection.removeChild(paragraph);
+        paragraph = resultsSection.lastElementChild;
     }
+    resultsSection.innerHTML = results;
+    resultsSection.classList.remove("d-none");
+    resultsSection.classList.add("d-block");
+    await enablePopovers();
 }
 
-// const getDbData = async function(form) {
-//     const formData = new FormData(form);
-//     const data = Object.fromEntries(formData.entries());
-//     console.log(data);
-//     try {
-//          const dbData = await axios.post('/analyze-message', data);
-//          return dbData.data;
-//     } catch (err) {
-//         console.error("Error getting database data: ", err);
-//     }
-// }
-
+const enablePopovers = async function() {
+    const popoverTriggerList = document.querySelectorAll("[data-bs-toggle='popover']");
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, { html: true }));
+    const popover = new bootstrap.Popover(".popover-dismiss", { trigger: "focus" });
+}
 
 form.standard.addEventListener("change", async function() {
     const dbEdiStandard = await axios.get(`/api/edi-standards?name=${this.value}`);
@@ -105,17 +105,23 @@ form.clearBtn.addEventListener("click", function() {
     form.clearBtn.setAttribute("disabled", true);    
 });
 
+let results;
 form.validatationForm.addEventListener("submit", async function(event) {
     event.preventDefault();
     const formData = new FormData(form.validatationForm);
     const requestData = Object.fromEntries(formData.entries());
     try {
-         const responseData = await axios.post('/analyze-message', requestData);
-         processServerData(responseData.data);
-         console.log(responseData.data);
-        //  console.log(responseData.data);
+        await axios.post('/analyze-message', requestData)
+            .then(async function(response) {
+                await updateResults(response.data);
+            })
+            .catch(err => {
+                if (err.response && err.response.status === 400) {
+                    updateAndShowModal(err.response.data);
+                }
+            });
     } catch (err) {
-        console.error("Error getting server  data: ", err);
+        console.error("Error getting server data: ", err);
     }
 });
 

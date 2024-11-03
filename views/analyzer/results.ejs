@@ -1,0 +1,29 @@
+<% for (let segment of responseData.segments) { %>
+  <p class="segment lh-1 m-0 p-1 font-monospace"><span
+    class="segment-info-dot <%= segment.hasError ? "error" : "" %> ">&#x2B24</span
+    ><span class="data-element"
+      tabindex="0"
+      data-bs-toggle="popover"
+      data-bs-trigger="focus"
+      data-bs-title="<%= segment.data.code %>"
+      data-bs-content="<strong>Name:</strong> <%= segment.data.name %><br>
+        <strong>Usage:</strong> <%= segment.data.usage %><br>
+        <strong>Length:</strong> <%= segment.data.segment_length %> characters<br>
+        <strong>Repetitions:</strong> <%= segment.data.repetitions %><br>
+        <%= segment.parent_segment ? "<strong>Parent segment:</strong> " + segment.parent_segment.code : "" %>"
+    ><%= segment.data.code %></span
+    ><% for (let dataElement of segment.dataElements) { %><span
+      class="data-element <%= dataElement.isValid ? "" : "error" %> "
+      tabindex="0"
+      data-bs-toggle="popover"
+      data-bs-trigger="focus"
+      data-bs-title="<%= dataElement.data.code %>"
+      data-bs-content="<strong>Name:</strong> <%= dataElement.data.name %><br>
+        <strong>Usage:</strong> <%= dataElement.data.usage%><br>
+        <strong>Length:</strong> <%= dataElement.data.fixed_length
+          ? dataElement.data.fixed_length
+          : `${dataElement.data.min_length} to ${dataElement.data.max_length} characters`%><br>
+        <strong>Possible values:</strong> <%= dataElement.data.possible_values %>"
+    ><%= dataElement.value %></span><% } %></p
+  >
+<% } %>

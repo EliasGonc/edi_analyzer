@@ -33,8 +33,7 @@ SegmentContent.init(
             // allowNull: true,
             // default: "mandatory"
             type: DataTypes.STRING,
-            allowNull: false,
-            defaultValue: "mandatory",
+            allowNull: true,
             validate: {
                 isIn: [['mandatory', 'optional', 'conditional']]
             }

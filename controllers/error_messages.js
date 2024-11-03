@@ -1,5 +1,5 @@
 const ErrorMessage = require("../models/error_message");
-const { createWhereClause, validateRequestAttributes } = require("./helper_functions");
+const { createWhereClause } = require("./utils");
 
 exports.getErrorMessages = async (req, res) => {
     try {

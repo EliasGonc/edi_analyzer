@@ -1,17 +1,10 @@
+const { error } = require("console");
 const { EdiStandard, MessageType, MessageVersion, EdiMessage,
     Segment, DataElement, EdiMessageContent, SegmentContent } = require("../models/associations");
 const ErrorMessage = require("../models/error_message");
-const axios = require("../axiosInstance");
-const { create } = require("../models/edi_standard");
-const { removeLineFeeds, toTitleCase } = require("../utils/stringUtils");
-
-const createQueryString = function (params) {
-    let queryString = "?";
-    for (let param in params) {
-        queryString += `${param}=${params[param]}&`
-    }
-    return queryString.substring(0, queryString.length - 1);
-}
+const { removeLineFeeds, capitilizeFirstInSentence } = require("../utils/stringUtils");
+const ejs = require("ejs");
+const path = require("path");
 
 const getDatabaseData = async function (req, res) {
     const { body } = req;
@@ -97,7 +90,7 @@ const segmentUserMessage = async function (userMessage, dbData) {
                     segment: segment,
                     content: userMessage.slice(
                         segment.code.length,
-                        segment.segment_length - segment.code.length
+                        segment.segment_length
                     )
                 });
                 userMessage = userMessage.slice(segment.segment_length)
@@ -115,17 +108,15 @@ const segmentUserMessage = async function (userMessage, dbData) {
 }
 
 const analyzeDataElement = function (responseData, segment, dataElement) {
-    const regex = new RegExp(dataElement.data.possible_values);
-    dataElement.isValid = regex.test(dataElement.value);
+    if (dataElement.data.usage === "mandatory") {
+        const regex = new RegExp(dataElement.data.possible_values);
+        dataElement.isValid = regex.test(dataElement.value);
+    } else {
+        const regex = new RegExp(`(${dataElement.data.possible_values}|[0 ]{${dataElement.data.fixed_length}})`);
+        dataElement.isValid = regex.test(dataElement.value);
+    }
     segment.cursor += dataElement.data.fixed_length;
     responseData.segments[responseData.segments.length - 1].dataElements.push({ ...dataElement });
-    // element: toTitleCase(dataElement.data.name),
-    // description: dataElement.data.description,
-    // length: dataElement.data.fixed_length,
-    // value: dataElement.value,
-    // possibleValues: dataElement.data.possible_values,
-    // isValid
-    // });
     return dataElement.isValid;
 }
 
@@ -146,6 +137,7 @@ const analyzeSegment = function (responseData, segment, dbData) {
         dataElement.data = resolveDataElementData(content.dataValues, dbData.dataElements.find(
             dataElement => dataElement.dataValues.id === content.data_element_id
         ));
+        dataElement.data.name = capitilizeFirstInSentence(dataElement.data.name);
         dataElement.value = segment.value.substring(
             segment.cursor,
             segment.cursor + dataElement.data.fixed_length
@@ -166,6 +158,15 @@ const getCurrentSegmentData = function (userMessageSegment, dbData) {
     currentSegment.data = dbData.segments.find(
         segment => segment.id === userMessageSegment.segment.id
     );
+    currentSegment.repetitions = createRepetitionsText(
+        currentSegment.data.min_repetitions,
+        currentSegment.data.max_repetitions
+    );
+    if (currentSegment.data.parent_segment_id) {
+        currentSegment.parent_segment = dbData.segments.find(
+            segment => segment.id === currentSegment.data.parent_segment_id
+        );
+    }
     currentSegment.cursor = 0;
     currentSegment.hasError = false;
     return currentSegment;
@@ -197,32 +198,6 @@ const createRepetitionsText = function (min_repetitions, max_repetitions) {
     return "unknown";
 }
 
-const createElement = function (name, classes, content, popOver = null) {
-
-}
-
-const createResponseHtml = function (responseData) {
-    const responseHtml = [];
-    for (let segment of responseData.segments) {
-        const segmentHtmlContent = [
-            createElement("span", ["segment-info-dot"], "&#x2B24"),
-            createElement("span", ["data-element"], segment.data.code, {
-                title: segment.code,
-                content: {
-                    name: segment.name,
-                    usage: segment.usage,
-                    length: `${segment.segment_length} characters`,
-                    repetitions: createRepetitionsText(segment.min_repetitions, segment.max_repetitions),
-                    parantSegment: `${segment.parrent}`
-                }
-            })
-        ];
-        for (let dataElement of segments.dataElements) {
-            segmentHtmlContent.push(createElement("span", "data-element"))
-        }
-    }
-}
-
 exports.analyzeMessage = async function (req, res) {
     const dbData = await getDatabaseData(req, res);
     const responseJson = {
@@ -233,17 +208,28 @@ exports.analyzeMessage = async function (req, res) {
     };
     if (!checkMessageHeader(dbData.standard, dbData.type, dbData.version, req.body.message)) {
         const errorMessage = await parseErrorMessage(1, dbData.standard.name, dbData.type.name, dbData.version.name);
-        responseJson.modal = { title: errorMessage.title, body: errorMessage.message };
+        res.status(400).send(await ejs.renderFile(
+            path.join(__dirname, "..", "views", "analyzer", "modal.ejs"),
+            { title: errorMessage.title, content: errorMessage.message }
+        ));
     } else {
+        const responseData = { segments: [] };
         try {
-            const responseData = { segments: [] };
-            const segmentedMessage = await segmentUserMessage(req.body.message, dbData);
-            analyzeUserMessage(responseData, segmentedMessage, dbData);
-            responseJson.analysis = responseData;
+            analyzeUserMessage(responseData, await segmentUserMessage(req.body.message, dbData), dbData);
+            try {
+                res.status(200).send(await ejs.renderFile(
+                    path.join(__dirname, "..", "views", "analyzer", "results.ejs"),
+                    { responseData }
+                ));        
+            } catch (err) {
+                console.error("Error: ", err);
+                res.status(500).json("Internal server error");
+            }
         } catch (err) {
-            console.error(err);
-            responseJson.modal = { title: err.title, body: err.message };
+            res.status(400).send(await ejs.renderFile(
+                path.join(__dirname, "..", "views", "analyzer", "modal.ejs"),
+                { title: err.title, content: err.message }
+            ));
         }
     }
-    res.status(200).json(responseJson);
 }

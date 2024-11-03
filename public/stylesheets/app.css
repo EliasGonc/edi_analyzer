@@ -14,8 +14,13 @@ p.segment {
     white-space-collapse: preserve;
 }
 
+/* Segment dot */
 p.segment>span.segment-info-dot {
     color: green;
+}
+
+p.segment>span.segment-info-dot.error {
+    color: red;
 }
 
 p.segment>span.segment-info-dot:hover {
@@ -23,13 +28,29 @@ p.segment>span.segment-info-dot:hover {
     cursor: pointer;
 }
 
+p.segment>span.segment-info-dot.error:hover {
+    color: lightcoral;
+    cursor: pointer;
+}
+
+/* Data element */
 p.segment>span.data-element:hover {
     background-color: lightgreen;
     cursor: pointer;
 }
 
-#results {
+p.segment>span.data-element.error {
+    background-color: lightpink;
+    cursor: pointer;
+}
 
+p.segment>span.data-element.error:hover {
+    background-color: lightcoral;
+    cursor: pointer;
+}
+
+#message, #results {
+    font-size: 0.9em;
 }
 
 #message {

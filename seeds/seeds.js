@@ -93,7 +93,7 @@ async function seedAllAppTables() {
 
 sequelize.sync()
     .then(async () => {
-        await dropAllTables()
+        await dropAllTables();
         console.log("All tables have been dropped.");
         await seedAllAppTables();
         console.log("All tables have been created and seeded.");
