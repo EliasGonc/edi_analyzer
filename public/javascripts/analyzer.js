@@ -73,11 +73,13 @@ const enablePopovers = async function() {
 }
 
 form.standard.addEventListener("change", async function() {
-    const dbEdiStandard = await axios.get(`/api/edi-standards?name=${this.value}`);
-    const dbMessageTypes = await axios.get(`/api/message-types?edi_standard_id=${dbEdiStandard.data[0].id}`);
-    updateOptions(form.type, dbMessageTypes.data);
-    updateOptions(form.version, []);
-    checkFormRequirements();
+    console.log(ediStandards);
+    // const dbEdiStandard = await axios.get(`/api/edi-standards?name=${this.value}`);
+    // const ediStandardData = ediStandards.find(standard => standard.name === this.value);
+    // const dbMessageTypes = await axios.get(`/api/message-types?edi_standard_id=${dbEdiStandard.data[0].id}`);
+    // updateOptions(form.type, dbMessageTypes.data);
+    // updateOptions(form.version, []);
+    // checkFormRequirements();
 });
 
 form.type.addEventListener("change", async function() {

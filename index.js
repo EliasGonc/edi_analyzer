@@ -24,7 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", async (req, res) => {
   try {
     const ediStandards = await EdiStandard.getAllWithRelatedData();
-    res.render("analyzer/index", { ediStandards: ediStandards.dataValues });
+    // console.log(ediStandards.dataValues);
+    // res.send("Under construction");
+    res.render("analyzer/index", { ediStandards: ediStandards });
   } catch (err) {
     console.error("Error when rendering EDI Analyzer page", err.stack);
   }
