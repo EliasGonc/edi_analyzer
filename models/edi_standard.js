@@ -22,20 +22,20 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    EdiStandard.getAllWithRelatedData = async function() {
-        return await EdiStandard.findAll({
-            include: [
-                {
-                    model: MessageType, // Assuming MessageType is already defined and associated
-                    include: [
-                        {
-                            model: MessageVersion, // Assuming MessageVersion is already defined and associated
-                        }
-                    ]
-                }
-            ]
-        });
-    };
+    // EdiStandard.getAllWithRelatedData = async function() {
+    //     return await EdiStandard.findAll({
+    //         include: [
+    //             {
+    //                 model: MessageType,
+    //                 include: [
+    //                     {
+    //                         model: MessageVersion,
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    //     });
+    // };
     
     return EdiStandard;
 };

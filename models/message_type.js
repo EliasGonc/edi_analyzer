@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: true,
                 references: {
-                    model: "EdiStandard",
+                    model: "edi_standard",
                     key: "id",
                 }
             },

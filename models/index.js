@@ -1,4 +1,4 @@
-﻿const { Sequelize, DataTypes } = require("sequelize");
+﻿const { DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
 
 const EdiStandard = require("./edi_standard")(sequelize, DataTypes);
@@ -16,6 +16,20 @@ MessageType.belongsTo(EdiStandard, { foreignKey: "edi_standard_id" });
 
 MessageType.hasMany(MessageVersion, { foreignKey: "message_type_id", as: "message_versions" });
 MessageVersion.belongsTo(MessageType, { foreignKey: "message_type_id" });
+
+EdiStandard.getAllWithRelatedData = async function() {
+    return await EdiStandard.findAll({
+        include: [{
+            model: MessageType,
+            as: "message_types",
+            include: [{
+                model: MessageVersion,
+                as: "message_versions"
+            }]
+        }]
+    });
+};
+
 
 EdiStandard.hasMany(EdiMessage, { foreignKey: "edi_standard_id" });
 MessageType.hasMany(EdiMessage, { foreignKey: "message_type_id" });
@@ -37,7 +51,9 @@ SegmentContent.belongsTo(DataElement, { foreignKey: 'data_element_id', onDelete:
 Segment.hasMany(SegmentContent, { foreignKey: 'segment_id', onDelete: 'CASCADE', });
 DataElement.hasMany(SegmentContent, { foreignKey: 'data_element_id', onDelete: 'CASCADE', });
 
+sequelize.sync({ force: false });
+
 module.exports = {
     sequelize, EdiStandard, MessageType, MessageVersion, EdiMessage,
-    Segment, EdiMessageContent, DataElement, SegmentContent
+    Segment, EdiMessageContent, DataElement, SegmentContent, ErrorMessage
 };

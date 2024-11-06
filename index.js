@@ -4,7 +4,7 @@ const sequelize = require("./db/connect");
 const ejsMate = require("ejs-mate");
 
 // Models
-const { EdiStandard } = require("./models/associations");
+const { EdiStandard } = require("./models/");
 
 // Routes
 const analyzerRoutes = require("./routes/analyzer");
@@ -24,8 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", async (req, res) => {
   try {
     const ediStandards = await EdiStandard.getAllWithRelatedData();
-    console.log(ediStandards);
-    res.render("analyzer/index", { ediStandards });
+    res.render("analyzer/index", { ediStandards: ediStandards.dataValues });
   } catch (err) {
     console.error("Error when rendering EDI Analyzer page", err.stack);
   }

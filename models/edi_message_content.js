@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: "EdiMessage",
+                    model: "edi_message",
                     key: "id"
                 }
             },
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 references: {
-                    model: "Segment",
+                    model: "segment",
                     key: "id"
                 }
             },
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: true,
                 references: {
-                    model: "Segment",
+                    model: "segment",
                     key: "id",
                 },
             },
@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: true,
                 references: {
-                    model: "Segment",
+                    model: "segment",
                     key: "id",
                 },
             }

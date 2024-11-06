@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 references: {
-                    model: "Segment",
+                    model: "segment",
                     key: "id"
                 }
             },
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 references: {
-                    model: "DataElement",
+                    model: "data_element",
                     key: "id"
                 }
             },

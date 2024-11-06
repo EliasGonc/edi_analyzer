@@ -10,21 +10,21 @@ module.exports = (sequelize, DataTypes) => {
             edi_standard_id: {
                 type: DataTypes.INTEGER,
                 references: {
-                    model: "EdiStandard",
+                    model: "edi_standard",
                     key: "id"
                 }
             },
             message_type_id: {
                 type: DataTypes.INTEGER,
                 references: {
-                    model: "MessageType",
+                    model: "message_type",
                     key: "id"
                 }
             },
             message_version_id: {
                 type: DataTypes.INTEGER,
                 references: {
-                    model: "MessageVersion",
+                    model: "message_version",
                     key: "id"
                 }
             },
