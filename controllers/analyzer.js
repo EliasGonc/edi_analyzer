@@ -200,12 +200,6 @@ const createRepetitionsText = function (min_repetitions, max_repetitions) {
 
 exports.analyzeMessage = async function (req, res) {
     const dbData = await getDatabaseData(req, res);
-    const responseJson = {
-        analysis: {
-            segments: []
-        },
-        modal: ""
-    };
     if (!checkMessageHeader(dbData.standard, dbData.type, dbData.version, req.body.message)) {
         const errorMessage = await parseErrorMessage(1, dbData.standard.name, dbData.type.name, dbData.version.name);
         res.status(400).send(await ejs.renderFile(
