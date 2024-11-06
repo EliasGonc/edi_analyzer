@@ -29,8 +29,9 @@ module.exports = (sequelize, DataTypes) => {
             timestamps: false,
         }
     );
+    
     return MessageVersion;
-}
+};
 
 /*
 const { Model, DataTypes } = require("sequelize");

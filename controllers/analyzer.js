@@ -1,6 +1,8 @@
-const { EdiStandard, MessageType, MessageVersion, EdiMessage,
-    Segment, DataElement, EdiMessageContent, SegmentContent } = require("../models/associations");
-const ErrorMessage = require("../models/error_message");
+const {
+    EdiStandard, MessageType, MessageVersion, EdiMessage, Segment,
+    DataElement, EdiMessageContent, SegmentContent, ErrorMessage
+} = require("../models/index");
+// const ErrorMessage = require("../models/error_message");
 const { removeLineFeeds, capitilizeFirstInSentence } = require("../utils/stringUtils");
 const ejs = require("ejs");
 const path = require("path");
@@ -213,7 +215,7 @@ exports.analyzeMessage = async function (req, res) {
                 res.status(200).send(await ejs.renderFile(
                     path.join(__dirname, "..", "views", "analyzer", "results.ejs"),
                     { responseData }
-                ));        
+                ));
             } catch (err) {
                 console.error("Error: ", err);
                 res.status(500).json("Internal server error");

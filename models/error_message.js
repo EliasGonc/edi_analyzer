@@ -1,3 +1,40 @@
+module.exports = (sequelize, DataTypes) => {
+    const ErrorMessage = sequelize.define(
+        "ErrorMessage",
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false
+            },
+            type: {
+                // type: DataTypes.ENUM('format'),
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    isIn: [['format']]
+                }
+            },
+            title: {
+                // type: DataTypes.STRING(100),
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            message: {
+                type: DataTypes.TEXT,
+                allowNull: false
+            }
+        },
+        {
+            tableName: "error_message",
+            timeStamps: false
+        }
+    );
+
+    return ErrorMessage;
+};
+/*
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
 
@@ -38,3 +75,4 @@ ErrorMessage.init(
 )
 
 module.exports = ErrorMessage;
+*/

@@ -1,8 +1,8 @@
-const sequelize = require("../db/connect");
+// const sequelize = require("../db/connect");
 const {
-    EdiStandard, MessageType, MessageVersion, EdiMessage, Segment, DataElement,
-    EdiMessageContent, SegmentContent
-} = require("../models/associations.js");
+    sequelize, EdiStandard, MessageType, MessageVersion, EdiMessage, Segment,
+    DataElement, EdiMessageContent, SegmentContent
+} = require("../models/index.js");
 const { dropTable, seedTable } = require("../db/utils.js");
 const ediStandardSeeds = require("./edi_standard_seeds");
 const messageTypeSeeds = require("./message_type_seeds");
@@ -33,7 +33,7 @@ async function pushDataElements(data, segment, segmentContentSeed) {
     let i;
     for (i = 0; i < segmentContentSeed.data_elements.length; i++) {
         const dataElementSeed = segmentContentSeed.data_elements[i];
-        const dataElement = await DataElement.findOne({ where: { code: dataElementSeed }});
+        const dataElement = await DataElement.findOne({ where: { code: dataElementSeed } });
         // console.log(`${segment.code} segment: ${remainingCharacters} characteres remaining. Pushing data element "${dataElement.name}" (${dataElement.fixed_length} characters)`);
         data.push({
             segment_id: segment.id,
@@ -48,7 +48,7 @@ async function pushDataElements(data, segment, segmentContentSeed) {
 
 async function pushBlankElement(data, remainingCharacters, position, segmentId) {
     if (remainingCharacters > 0) {
-        const blankDataElement = await DataElement.findOne({ where: { code: "9999" }});
+        const blankDataElement = await DataElement.findOne({ where: { code: "9999" } });
         data.push({
             segment_id: segmentId,
             data_element_id: blankDataElement.id,
@@ -68,7 +68,7 @@ async function seedSegmentContent() {
                 model: MessageVersion,
                 where: { name: segmentContentSeed.version }
             },
-            where: { code: segmentContentSeed.segment }   
+            where: { code: segmentContentSeed.segment }
         });
         const { remainingCharacters, position } = await pushDataElements(data, segment, segmentContentSeed);
         await pushBlankElement(data, remainingCharacters, position, segment.id);
