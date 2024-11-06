@@ -1,4 +1,3 @@
-const { error } = require("console");
 const { EdiStandard, MessageType, MessageVersion, EdiMessage,
     Segment, DataElement, EdiMessageContent, SegmentContent } = require("../models/associations");
 const ErrorMessage = require("../models/error_message");

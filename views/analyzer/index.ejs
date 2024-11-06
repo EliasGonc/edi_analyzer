@@ -12,9 +12,11 @@
         <div class="input-group">
           <span class="input-group-text">EDI Standard</span>
           <select class="form-select" name="standard" id="standard">
-            <!-- <option disabled selected value="" class="option-hidden"></option> -->
+            <option disabled selected value="" class="option-hidden"></option>
             <% for (let ediStandard of ediStandards) { %>
-            <option value="<%= ediStandard.name %>"><%= ediStandard.name %></option>
+            <option value="<%= ediStandard.name %>">
+              <%= ediStandard.name %>
+            </option>
             <% } %>
           </select>
         </div>
@@ -25,7 +27,6 @@
         <div class="input-group">
           <span class="input-group-text">Message type</span>
           <select class="form-select" name="type" id="type">
-            <option value="001">001</option>
           </select>
         </div>
       </div>
@@ -35,7 +36,6 @@
         <div class="input-group">
           <span class="input-group-text">Version</span>
           <select class="form-select" name="version" id="version">
-            <option value="60">60</option>
           </select>
         </div>
       </div>
@@ -46,16 +46,8 @@
       </div>
 
       <div class="col-12 form-floating">
-        <textarea class="form-control font-monospace" placeholder="Type or paste a message here" id="message" name="message">
-ITP00160000002410180128015910442201038460476884000268        AJL1    VOLKSWAGEN DO BRASIL LTDA                      AJL1        
-PE1057000000166241018         000000    2QB   201797A                                           23043977    57   GEINALDO DUPC0P
-PE22410160004586741   241016000000200000000000383300000000003849000000000000000011 00000000REC.MO 0000S                         
-PE344444400000000040241018000000001202410210000000012024102200000000120241025000000001602410280000000016024102900000000080      
-PE324103000000000120241031000000001202411010000000008024110400000000120241105000000000802411060000000008024110700000000080      
-PE324110800000000040241111000000000402411120000000004024111300000000040241118000000000402411190000000000300000000000000000      
-PE4                                                            000000000000                              000000000000           
-FTP00000000000008                                                                                                               
-</textarea>
+        <textarea class="form-control font-monospace" placeholder="Type or paste a message here"
+          id="message" name="message"></textarea>
         <label for="message">Message</label>
       </div>
 
@@ -70,13 +62,9 @@ FTP00000000000008
 
   </section>
 
-  <section class="border rounded p-2 overflow-x-auto text-nowrap mb-3 d-none" id="results">
-    <%#- include("./partials/examples/rnd_001_60.ejs") %>
-  </section>
+  <section class="border rounded p-2 overflow-x-auto text-nowrap mb-3 d-none" id="results"></section>
   
   <button type="button" class="btn btn-secondary d-none">Show human readable version</button>
 
-  <div class="modal" tabindex="-1" id="analyzerModal">
-    <%#- include("../partials/modal") %> 
-  </div>
+  <div class="modal" tabindex="-1" id="analyzerModal"></div>
 </main>

@@ -23,7 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.get("/", async (req, res) => {
   try {
-    res.render("analyzer/index", { ediStandards: await EdiStandard.findAll({}) });
+    const ediStandards = await EdiStandard.getAllWithRelatedData();
+    console.log(ediStandards);
+    res.render("analyzer/index", { ediStandards });
   } catch (err) {
     console.error("Error when rendering EDI Analyzer page", err.stack);
   }

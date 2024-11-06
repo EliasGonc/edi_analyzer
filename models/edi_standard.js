@@ -1,7 +1,69 @@
+module.exports = (sequelize, DataTypes) => {
+    const EdiStandard = sequelize.define(
+        "EdiStandard", 
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            identifier: {
+                type: DataTypes.STRING,
+                allowNull: false
+            }
+        },
+        {
+            tableName: "edi_standard",
+            timestamps: false
+        }
+    );
+
+    EdiStandard.getAllWithRelatedData = async function() {
+        return await EdiStandard.findAll({
+            include: [
+                {
+                    model: MessageType, // Assuming MessageType is already defined and associated
+                    include: [
+                        {
+                            model: MessageVersion, // Assuming MessageVersion is already defined and associated
+                        }
+                    ]
+                }
+            ]
+        });
+    };
+
+    return EdiStandard;
+};
+
+/*
 const { Model, DataTypes } = require("sequelize");
+const { MessageType } = require("./message_type");
+const { MessageVersion } = require("./message_version");
 const sequelize = require("../db/connect");
 
-class EdiStandard extends Model {}
+class EdiStandard extends Model {
+    static async getAllWithRelatedData() {
+        return await EdiStandard.findAll({
+            include: [
+                {
+                    model: MessageType,
+                    as: "message_types",
+                    include: [
+                        {
+                            model: MessageVersion,
+                            as: "message_versions"
+                        }
+                    ]
+                }
+            ]
+        });
+    }
+}
 
 EdiStandard.init(
     {
@@ -29,3 +91,4 @@ EdiStandard.init(
 );
 
 module.exports = EdiStandard;
+*/

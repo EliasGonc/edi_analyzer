@@ -7,10 +7,10 @@ const DataElement = require("./data_element");
 const EdiMessageContent = require("./edi_message_content");
 const SegmentContent = require("./segment_content");
 
-EdiStandard.hasMany(MessageType, { foreignKey: "edi_standard_id" });
+EdiStandard.hasMany(MessageType, { foreignKey: "edi_standard_id", as: "message_types" });
 MessageType.belongsTo(EdiStandard, { foreignKey: "edi_standard_id" });
 
-MessageType.hasMany(MessageVersion, { foreignKey: "message_type_id" });
+MessageType.hasMany(MessageVersion, { foreignKey: "message_type_id", as: "message_versions" });
 MessageVersion.belongsTo(MessageType, { foreignKey: "message_type_id" });
 
 EdiStandard.hasMany(EdiMessage, { foreignKey: "edi_standard_id" });
