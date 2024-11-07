@@ -2,7 +2,6 @@ const {
     EdiStandard, MessageType, MessageVersion, EdiMessage, Segment,
     DataElement, EdiMessageContent, SegmentContent, ErrorMessage
 } = require("../models/index");
-// const ErrorMessage = require("../models/error_message");
 const { removeLineFeeds, capitilizeFirstInSentence } = require("../utils/stringUtils");
 const ejs = require("ejs");
 const path = require("path");
@@ -173,6 +172,13 @@ const getCurrentSegmentData = function (userMessageSegment, dbData) {
     return currentSegment;
 }
 
+const getMissingMandatorySegments = function (responseData, segmentedUserMessage, dbData) {
+    // console.log(segmentedUserMessage[0]);
+    // for (let segment of segmentedUserMessage) {
+    //     // console.log(segment);
+    // }
+}
+
 /**
 * Analyzes the user message and returns an array with the analysis results
 * @param {Array} segmentedUserMessage - An array where each entry contains an object with the user message segment raw segment contents and the segment information
@@ -182,6 +188,7 @@ const getCurrentSegmentData = function (userMessageSegment, dbData) {
 const analyzeUserMessage = function (responseData, segmentedUserMessage, dbData) {
     const currentSegment = getCurrentSegmentData(segmentedUserMessage[0], dbData);
     responseData.segments.push({ ...currentSegment, dataElements: [] });
+    // getMissingMandatorySegments(responseData, segmentedUserMessage, dbData);
     analyzeSegment(responseData, currentSegment, dbData);
     if (segmentedUserMessage.length > 1) {
         analyzeUserMessage(responseData, segmentedUserMessage.slice(1), dbData);
@@ -226,5 +233,18 @@ exports.analyzeMessage = async function (req, res) {
                 { title: err.title, content: err.message }
             ));
         }
+    }
+}
+
+exports.getAnalyzerOptions = async function(req, res) {
+    try {
+        res.status(200).json({
+            standards: await EdiStandard.findAll({}),
+            types: await MessageType.findAll({}),
+            versions: await MessageVersion.findAll({})
+        });
+    } catch (err) {
+        console.error("Error fetching database data: ", err);
+        res.status(500).json("Internal server error");
     }
 }

@@ -15,7 +15,12 @@ modal.body = document.querySelector("#analyzerModal .modal-body>p");
 
 const resultsSection = document.querySelector("#results");
 
-let dbData;
+let analyzerOptions;
+
+window.addEventListener("load", async event => {
+    const axiosResponse = await axios.get("/analyzer-options");
+    analyzerOptions = axiosResponse.data;
+}) 
 
 const createNewOption = function(text, value, hidden = false) {
     const newOption = document.createElement("option");
@@ -29,13 +34,13 @@ const createNewOption = function(text, value, hidden = false) {
     return newOption;
 }
 
-const updateOptions = function(selectElement, dbNewOptions) {
+const updateOptions = function(selectElement, newOptions) {
     selectElement.replaceChildren();
     selectElement.appendChild(createNewOption("", "", true));
-    for (let dbNewOption of dbNewOptions) {
+    for (let newOption of newOptions) {
         selectElement.appendChild(createNewOption(
-            dbNewOption.name,
-            dbNewOption.name
+            newOption.name,
+            newOption.name
         ));
     }
 }
@@ -73,19 +78,17 @@ const enablePopovers = async function() {
 }
 
 form.standard.addEventListener("change", async function() {
-    console.log(ediStandards);
-    // const dbEdiStandard = await axios.get(`/api/edi-standards?name=${this.value}`);
-    // const ediStandardData = ediStandards.find(standard => standard.name === this.value);
-    // const dbMessageTypes = await axios.get(`/api/message-types?edi_standard_id=${dbEdiStandard.data[0].id}`);
-    // updateOptions(form.type, dbMessageTypes.data);
-    // updateOptions(form.version, []);
-    // checkFormRequirements();
+    const standard = analyzerOptions.standards.find(standard => standard.name === this.value);
+    const types = analyzerOptions.types.filter(type => type.edi_standard_id === standard.id);
+    updateOptions(form.type, types);
+    updateOptions(form.version, []);
+    checkFormRequirements();
 });
 
 form.type.addEventListener("change", async function() {
-    const dbMessageType = await axios.get(`/api/message-types?name=${this.value}`);
-    const dbMessageVersions = await axios.get(`/api/message-versions?message_type_id=${dbMessageType.data[0].id}`);
-    updateOptions(form.version, dbMessageVersions.data);
+    const type = analyzerOptions.types.find(type => type.name === this.value);
+    const versions = analyzerOptions.versions.filter(version => version.message_type_id === type.id);
+    updateOptions(form.version, versions);
     checkFormRequirements();
 });
 
