@@ -10,7 +10,7 @@
         <strong>Usage:</strong> <%= segment.data.usage %><br>
         <strong>Length:</strong> <%= segment.data.segment_length %> characters<br>
         <strong>Repetitions:</strong> <%= segment.data.repetitions %><br>
-        <%= segment.parent_segment ? "<strong>Parent segment:</strong> " + segment.parent_segment.code : "" %>"
+        <%= segment.parentSegment ? "<strong>Parent segment:</strong> " + segment.parentSegment.code : "" %>"
     ><%= segment.data.code %></span
     ><% for (let dataElement of segment.dataElements) { %><span
       class="data-element <%= dataElement.isValid ? "" : "error" %> "

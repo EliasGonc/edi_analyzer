@@ -59,12 +59,16 @@ const updateAndShowModal = function(results) {
     bsModal.show();
 }
 
-const updateResults = async function(results) {
+const clearResults = function() {
     let paragraph = resultsSection.lastElementChild;
     while (paragraph) {
         resultsSection.removeChild(paragraph);
         paragraph = resultsSection.lastElementChild;
     }
+}
+
+const updateResults = async function(results) {
+    clearResults();
     resultsSection.innerHTML = results;
     resultsSection.classList.remove("d-none");
     resultsSection.classList.add("d-block");
@@ -122,6 +126,8 @@ form.validatationForm.addEventListener("submit", async function(event) {
             })
             .catch(err => {
                 if (err.response && err.response.status === 400) {
+                    resultsSection.classList.remove("d-block");
+                    resultsSection.classList.add("d-none");
                     updateAndShowModal(err.response.data);
                 }
             });
