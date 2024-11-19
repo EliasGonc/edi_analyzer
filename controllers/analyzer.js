@@ -155,15 +155,16 @@ const getCurrentSegmentData = function (userMessageSegment, dbData) {
     currentSegment.contents = dbData.segmentsContents.filter(
         segmentContent => segmentContent.segment_id === userMessageSegment.segment.id
     );
-    currentSegment.data = dbData.segments.find(
-        segment => segment.id === userMessageSegment.segment.id
-    );
+    currentSegment.data = userMessageSegment.segment;
+    // currentSegment.data = dbData.segments.find(
+    //     segment => segment.id === userMessageSegment.segment.id
+    // );
     currentSegment.repetitions = createRepetitionsText(
         currentSegment.data.min_repetitions,
         currentSegment.data.max_repetitions
     );
     if (currentSegment.data.parent_segment_id) {
-        currentSegment.parent_segment = dbData.segments.find(
+        currentSegment.parentSegment = dbData.segments.find(
             segment => segment.id === currentSegment.data.parent_segment_id
         );
     }
@@ -181,9 +182,9 @@ const getMissingMandatorySegments = function (responseData, segmentedUserMessage
 
 /**
 * Analyzes the user message and returns an array with the analysis results
+* @param {Array} responseData - An array that will contain the analysis of the user message, since this function is recursive
 * @param {Array} segmentedUserMessage - An array where each entry contains an object with the user message segment raw segment contents and the segment information
 * @param {Array} dbData - An array containing the database information of all elements of an EDI messages
-* @param {Array} responseData - An array that will contain the analysis of the user message, since this function is recursive
 */
 const analyzeUserMessage = function (responseData, segmentedUserMessage, dbData) {
     const currentSegment = getCurrentSegmentData(segmentedUserMessage[0], dbData);
